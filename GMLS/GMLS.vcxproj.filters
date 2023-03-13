@@ -33,12 +33,6 @@
     <ClCompile Include="..\ReadData.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\SIMM.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\SISM.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\SubProblem.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -55,56 +49,11 @@
     <None Include="..\machine01.csv">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="..\machine1.csv">
-      <Filter>资源文件</Filter>
-    </None>
     <None Include="..\machine02.csv">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="..\machine2.csv">
       <Filter>资源文件</Filter>
     </None>
     <None Include="..\machine03.csv">
       <Filter>资源文件</Filter>
-    </None>
-    <None Include="..\machine3.csv">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="..\machine4.csv">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="..\LSMM1.lp">
-      <Filter>Models</Filter>
-    </None>
-    <None Include="..\LSMM2.lp">
-      <Filter>Models</Filter>
-    </None>
-    <None Include="..\LSMM3.lp">
-      <Filter>Models</Filter>
-    </None>
-    <None Include="..\LSMM12.lp">
-      <Filter>Models</Filter>
-    </None>
-    <None Include="..\LSMM13.lp">
-      <Filter>Models</Filter>
-    </None>
-    <None Include="..\LSMM23.lp">
-      <Filter>Models</Filter>
-    </None>
-    <None Include="..\LSMM123.lp">
-      <Filter>Models</Filter>
-    </None>
-    <None Include="..\SubProblem1.lp">
-      <Filter>Models</Filter>
-    </None>
-    <None Include="..\TheFirstMasterProblem.lp">
-      <Filter>Models</Filter>
-    </None>
-    <None Include="..\TheFirstMasterProblemR.lp">
-      <Filter>Models</Filter>
-    </None>
-    <None Include="..\TheNewMasterProblemR.lp">
-      <Filter>Models</Filter>
     </None>
   </ItemGroup>
 </Project>

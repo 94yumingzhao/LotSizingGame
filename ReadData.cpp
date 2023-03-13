@@ -1,4 +1,4 @@
-
+﻿
 #include "GMLS.h"
 using namespace std;
 
@@ -6,10 +6,10 @@ void SplitString(const string& line_string, vector<string>& string_list, const s
 {
 	string_list.clear();
 	string::size_type pos1, pos2;
-	
+
 	pos1 = 0;
 	pos2 = line_string.find(data_string);
-	
+
 	while (string::npos != pos2)
 	{
 		string_list.push_back(line_string.substr(pos1, pos2 - pos1));
@@ -24,14 +24,12 @@ void SplitString(const string& line_string, vector<string>& string_list, const s
 	}
 }
 
-void FirstReadData(All_Values& Values, All_Lists& Lists,int coalition_flag)
+void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 {
-	
-
 	int machs_num = Values.machs_num;
 	int prids_num = Values.prids_num;
 
-	ifstream file_c1; 
+	ifstream file_c1;
 	ifstream file_c2;
 	ifstream file_c3;
 
@@ -46,40 +44,40 @@ void FirstReadData(All_Values& Values, All_Lists& Lists,int coalition_flag)
 	// coalition class 0
 	if (coalition_flag == 0)
 	{
-		file_c1.open("machine01.csv");
-		file_c2.open("machine02.csv");
-		file_c3.open("machine03.csv");
+		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine01.csv");
+		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/machine02.csv");
+		file_c3.open("C:/Users/YMZhao/Desktop/GMLS/machine03.csv");
 	}
 
 	// coalition class 1
 	if (coalition_flag == 1)
 	{
-		file_c1.open("machine01.csv");
+		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine01.csv");
 	}
 	if (coalition_flag == 2)
 	{
-		file_c1.open("machine02.csv");
+		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine02.csv");
 	}
 	if (coalition_flag == 3)
 	{
-		file_c1.open("machine03.csv");
+		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine03.csv");
 	}
 
 	// coalition class 2
 	if (coalition_flag == 4)
 	{
-		file_c1.open("machine01.csv");
-		file_c2.open("machine02.csv");
+		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine01.csv");
+		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/machine02.csv");
 	}
 	if (coalition_flag == 5)
 	{
-		file_c1.open("machine01.csv");
-		file_c2.open("machine03.csv");
+		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine01.csv");
+		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/machine03.csv");
 	}
 	if (coalition_flag == 6)
 	{
-		file_c1.open("machine02.csv");
-		file_c2.open("machine03.csv");
+		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine02.csv");
+		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/machine03.csv");
 	}
 
 	// init vector
@@ -109,8 +107,10 @@ void FirstReadData(All_Values& Values, All_Lists& Lists,int coalition_flag)
 	{
 		for (int t = 0; t < prids_num; t++)
 		{
-			Lists.primal_parameters[t].d =
-				atoi(linedatas_c1[t].c_str()) + atoi(linedatas_c2[t].c_str()) + atoi(linedatas_c3[t].c_str());
+			Lists.primal_parameters[t].d = 0;
+			Lists.primal_parameters[t].d += atoi(linedatas_c1[t].c_str());
+			Lists.primal_parameters[t].d += atoi(linedatas_c2[t].c_str());
+			Lists.primal_parameters[t].d += atoi(linedatas_c3[t].c_str());
 			Values.machine_capacity += Lists.primal_parameters[t].d;
 		}
 	}
@@ -121,7 +121,7 @@ void FirstReadData(All_Values& Values, All_Lists& Lists,int coalition_flag)
 		for (int t = 0; t < prids_num; t++)
 		{
 			Lists.primal_parameters[t].d = atoi(linedatas_c1[t].c_str());
-			Values.machine_capacity+= Lists.primal_parameters[t].d;
+			Values.machine_capacity += Lists.primal_parameters[t].d;
 		}
 	}
 
@@ -130,12 +130,14 @@ void FirstReadData(All_Values& Values, All_Lists& Lists,int coalition_flag)
 	{
 		for (int t = 0; t < prids_num; t++)
 		{
-			Lists.primal_parameters[t].d = atoi(linedatas_c1[t].c_str()) + atoi(linedatas_c2[t].c_str());
+			Lists.primal_parameters[t].d = 0;
+			Lists.primal_parameters[t].d += atoi(linedatas_c1[t].c_str());
+			Lists.primal_parameters[t].d += atoi(linedatas_c2[t].c_str());
 			Values.machine_capacity += Lists.primal_parameters[t].d;
-		}	
+		}
 	}
 
-	
+
 	getline(file_c1, oneline_c1); // skip line 3, space
 	getline(file_c1, oneline_c1); // skip line 4, col names
 	getline(file_c1, oneline_c1); // read line 5, production cost data
@@ -186,17 +188,17 @@ void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 	vector<string> linedatas_c2;
 	vector<string> linedatas_c3;
 
-	file_c1.open("machine01.csv");
-	file_c2.open("machine02.csv");
-	file_c3.open("machine03.csv");
- 
+	file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine01.csv");
+	file_c2.open("C:/Users/YMZhao/Desktop/GMLS/machine02.csv");
+	file_c3.open("C:/Users/YMZhao/Desktop/GMLS/machine03.csv");
+
 	// init demand_matrix
 	for (int m = 0; m < machs_num; m++)
 	{
 		vector<int> demand_list;
 		for (int t = 0; t < prids_num; t++)
 		{
-			int one_demand=-1;
+			int one_demand = -1;
 			demand_list.push_back(one_demand);
 		}
 		Lists.demand_matrix.push_back(demand_list);
@@ -205,17 +207,17 @@ void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 	// update demand_matrix
 	if (coalition_flag == 10)
 	{
-		getline(file_c1, oneline_c1); 
-		getline(file_c1, oneline_c1); 
+		getline(file_c1, oneline_c1);
+		getline(file_c1, oneline_c1);
 		SplitString(oneline_c1, linedatas_c1, ",");
 
-		getline(file_c2, oneline_c2); 
-		getline(file_c2, oneline_c2); 	
+		getline(file_c2, oneline_c2);
+		getline(file_c2, oneline_c2);
 		SplitString(oneline_c2, linedatas_c2, ",");
 
-		getline(file_c3, oneline_c3); 
-		getline(file_c3, oneline_c3); 		
-		SplitString(oneline_c3, linedatas_c3, ","); 
+		getline(file_c3, oneline_c3);
+		getline(file_c3, oneline_c3);
+		SplitString(oneline_c3, linedatas_c3, ",");
 
 		for (int m = 0; m < machs_num; m++)
 		{
@@ -235,7 +237,7 @@ void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 				}
 			}
 		}
-		
+
 		// init vector<> primal_parameters
 		for (int t = 0; t < prids_num; t++)
 		{

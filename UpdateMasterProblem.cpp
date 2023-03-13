@@ -1,4 +1,4 @@
-// 2023-03-12
+﻿// 2023-03-12
 
 #include "GMLS.h"
 using namespace std;
@@ -81,20 +81,20 @@ void SolveUpdateMasterProblem(
 	if (MP_flag == 1)
 		printf("	This MP has feasible solutions\n");
 
-	float Obj_value = Cplex_MP.getObjValue();
-	printf("\n	The OBJECTIVE VALUE is %f\n", Obj_value);
+	int Obj_value = Cplex_MP.getObjValue();
+	printf("\n	The OBJECTIVE VALUE is %d\n", Obj_value);
 
 	printf("\n	//////////W//////////\n\n");
 
 	for (int col = 0; col < cols_num; col++)
 	{
-		double w_soln_val = Cplex_MP.getValue(w_vars[col]);
-		printf("	W_%d = %f\n", col + 1, w_soln_val);
+		int w_soln_val = Cplex_MP.getValue(w_vars[col]);
+		printf("	W_%d = %d\n", col + 1, w_soln_val);
 		Lists.master_solns_list.push_back(w_soln_val);
 	}
 
-	double v_soln_val = Cplex_MP.getValue(v_var);
-	printf("	V = %f\n", v_soln_val);
+	int v_soln_val = Cplex_MP.getValue(v_var);
+	printf("	V = %d\n", v_soln_val);
 
 	printf("\n	//////////Dual//////////\n\n");
 

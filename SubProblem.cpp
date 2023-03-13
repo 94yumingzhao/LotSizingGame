@@ -1,4 +1,4 @@
-// 2023-02-21 lot sizing sub problem
+﻿// 2023-02-21 lot sizing sub problem
 
 
 #include "GMLS.h"
@@ -98,37 +98,36 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists)
 	Cplex_SP.extract(Model_SP);
 	Cplex_SP.exportModel("SubProblem1.lp");
 	bool SP_flag = Cplex_SP.solve();
+	printf("\n/////////// CPLEX SOLVING END ////////////\n");
 
 	//if (coalition_flag == 1)
-	//{
-	//	Cplex_SP.exportModel("LSMM1.lp");
-	//}
-	//if (coalition_flag == 2)
-	//{
-	//	Cplex_SP.exportModel("LSMM2.lp");
-	//}
-	//if (coalition_flag == 3)
-	//{
-	//	Cplex_SP.exportModel("LSMM3.lp");
-	//}
-	//if (coalition_flag == 4)
-	//{
-	//	Cplex_SP.exportModel("LSMM12.lp");
-	//}
-	//if (coalition_flag == 5)
-	//{
-	//	Cplex_SP.exportModel("LSMM13.lp");
-	//}
-	//if (coalition_flag == 6)
-	//{
-	//	Cplex_SP.exportModel("LSMM23.lp");
-	//}
-	//if (coalition_flag == 7)
-	//{
-	//	Cplex_SP.exportModel("LSMM123.lp");
-	//}
-
-	printf("\n/////////// CPLEX SOLVING END ////////////\n");
+//{
+//	Cplex_SP.exportModel("LSMM1.lp");
+//}
+//if (coalition_flag == 2)
+//{
+//	Cplex_SP.exportModel("LSMM2.lp");
+//}
+//if (coalition_flag == 3)
+//{
+//	Cplex_SP.exportModel("LSMM3.lp");
+//}
+//if (coalition_flag == 4)
+//{
+//	Cplex_SP.exportModel("LSMM12.lp");
+//}
+//if (coalition_flag == 5)
+//{
+//	Cplex_SP.exportModel("LSMM13.lp");
+//}
+//if (coalition_flag == 6)
+//{
+//	Cplex_SP.exportModel("LSMM23.lp");
+//}
+//if (coalition_flag == 7)
+//{
+//	Cplex_SP.exportModel("LSMM123.lp");
+//}
 
 	int obj_val = Cplex_SP.getObjValue();
 	printf("\n	Obj = %d\n", obj_val);

@@ -1,4 +1,4 @@
-/*
+﻿/*
 2023-02-21
 Core allocation master problem 
 */
@@ -175,30 +175,29 @@ void SolveFirstMasterProblem(
 	if (MP_flag == 1)
 		printf("	The FIRST MP has feasible solutions\n");
 
-	float Obj_value = Cplex_MP.getObjValue();
-	printf("\n	The OBJECTIVE VALUE is %f\n", Obj_value);
+	IloNum Obj_value = Cplex_MP.getObjValue();
+	printf("\n	The OBJECTIVE VALUE is %d\n", Obj_value);
 
 	printf("\n	/////////// W /////////\n\n");
 
 	for (int col = 0; col < cols_num; col++)
 	{
-		double w_soln_val = Cplex_MP.getValue(w_vars[col]);
-		printf("	W_%d = %f\n", col +1, w_soln_val);
+		IloNum w_soln_val = Cplex_MP.getValue(w_vars[col]);
+		printf("	W_%d = %d\n", col +1,  w_soln_val);
 		Lists.master_solns_list.push_back(w_soln_val);
 	}
 
-	double v_soln_val = Cplex_MP.getValue(v_var);
-	printf("	V = %f\n", v_soln_val);
+	IloNum v_soln_val = Cplex_MP.getValue(v_var);
+	printf("	V = %d\n", v_soln_val);
 
 	printf("\n	////////// Dual //////////\n\n");
-
 	
 	//for (int m = 0; m < machs_num; m++)
 	//{
 	//	float MP_dual_price;
 	//	MP_dual_price = Cplex_MP.getDual((Cons_list)[m]);
 	//	Lists.dual_prices_list.push_back(MP_dual_price);
-	//	printf("Dual_%d = %f\n", m+1, MP_dual_price);
+	//	printf("Dual_%d = %d\n", m+1, MP_dual_price);
 	//}
 	
 

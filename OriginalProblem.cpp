@@ -1,4 +1,4 @@
-/*
+﻿/*
 2022-01-17
 single item multi machine lot sizing
 */
@@ -33,9 +33,13 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists,int coalition_fla
 		string Y_name = "Y_" + to_string(t + 1);
 		string I_name = "I_" + to_string(t + 1);
 
-		X_vars.add(IloNumVar(Env_OR, 0, IloInfinity, ILOINT, X_name.c_str()));
-		Y_vars.add(IloNumVar(Env_OR, 0, 1, ILOINT, Y_name.c_str()));
-		I_vars.add(IloNumVar(Env_OR, 0, IloInfinity, ILOINT, I_name.c_str()));
+		IloNumVar X_var = IloNumVar(Env_OR, 0, IloInfinity, ILOINT, X_name.c_str());
+		IloNumVar Y_var = IloNumVar(Env_OR, 0, 1, ILOINT, Y_name.c_str());
+		IloNumVar I_var = IloNumVar(Env_OR, 0, IloInfinity, ILOINT, I_name.c_str());
+
+		X_vars.add(X_var);
+		Y_vars.add(Y_var);
+		I_vars.add(I_var);
 	}
 
 	//2、目标函数
@@ -123,8 +127,6 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists,int coalition_fla
 	
 	printf("\n/////////// CPLEX SOLVING END ////////////\n");
 
-
-
 	int Obj_value = Cplex_OR.getObjValue();
 	Lists.coalition_cost_list.push_back(Obj_value);
 
@@ -140,15 +142,15 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists,int coalition_fla
 	cout << endl;
 	for (int t = 0; t < prids_num; t++)
 	{
-		int soln_val = Cplex_OR.getValue(Y_vars[t]);
-		printf("	Y_%d= %d\n", t + 1, soln_val);
+		int soln_val = Cplex_OR.getValue(I_vars[t]);
+		printf("	I_%d= %d\n", t + 1, soln_val);
 	}
 
 	cout << endl;
 	for (int t = 0; t < prids_num; t++)
 	{
-		int soln_val = Cplex_OR.getValue(I_vars[t]);
-		printf("	I_%d= %d\n", t + 1, soln_val);
+		int soln_val = Cplex_OR.getValue(Y_vars[t]);
+		printf("	Y_%d= %d\n", t + 1, soln_val);
 	}
 
 	Env_OR.end();

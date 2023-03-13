@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 2023-02-13
 lot sizing cooperative game
 */
@@ -18,17 +18,17 @@ struct Parameter_Struct
 	int i_index = -1;
 	int t_index = -1;
 	// int C = 0;
+
 	int c_X = -1;
 	int c_Y = -1;
 	int c_I = -1;
 	int d = -1;
 	int s_X = -1;
 	int s_Y = -1;
-
 	int d_sum = -1;
 };
 
-// ³õÊ¼½â½Ç±ê it
+// åˆå§‹è§£è§’æ ‡ it
 struct Variabe_Struct
 {
 	int i_index = -1;
@@ -48,15 +48,15 @@ struct All_Values
 	float current_branch_var_value;
 
 	int current_bench_time = 0;
-	float current_optimal_bound;
+	float current_optimal_bound=-1;
 
 	int machine_capacity = 0;
 };
 
 struct All_Lists
 {
-	vector<Parameter_Struct> primal_parameters; // ÎïÆ·Ê±¼ä½Ç±ê
-	vector<Variabe_Struct> current_solns_list; // ³õÊ¼Çó½â½á¹û
+	vector<Parameter_Struct> primal_parameters; // ç‰©å“æ—¶é—´è§’æ ‡
+	vector<Variabe_Struct> current_solns_list; // åˆå§‹æ±‚è§£ç»“æœ
 
 	vector<float> master_solns_list;
 
