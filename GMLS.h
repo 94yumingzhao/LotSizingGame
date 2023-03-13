@@ -51,6 +51,8 @@ struct All_Values
 	float current_optimal_bound=-1;
 
 	int machine_capacity = 0;
+
+	int core_find_flag = -1;
 };
 
 struct All_Lists
@@ -58,7 +60,7 @@ struct All_Lists
 	vector<Parameter_Struct> primal_parameters; // 物品时间角标
 	vector<Variabe_Struct> current_solns_list; // 初始求解结果
 
-	vector<float> master_solns_list;
+	vector<int> master_solns_list;
 
 	vector<float>dual_prices_list;
 
@@ -85,23 +87,13 @@ void FirstReadData(All_Values& Values, All_Lists& Lists,int coalition_flag);
 
 void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_flag);
 
-void SolveFirstMasterProblem(
-	All_Values& Values,
-	All_Lists& Lists,
-	IloEnv& Env_MP,
-	IloModel& Model_MP,
-	IloObjective& Obj_MP);
+void SolveFirstMasterProblem(All_Values& Values,All_Lists& Lists);
 
 void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag);
 
 void SolveSubProblem(All_Values& Values, All_Lists& Lists);
 
-void SolveUpdateMasterProblem(
-	All_Values& Values,
-	All_Lists& Lists,
-	IloEnv& Env_MP,
-	IloModel& Model_MP,
-	IloObjective& Obj_MP);
+void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists);
 
 void ColumnGeneration(All_Values& Values, All_Lists& Lists);
 

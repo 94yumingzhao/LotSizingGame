@@ -13,16 +13,16 @@ int main()
 
 	printf("\n\n+++++++++++++++++ Heuristics START +++++++++++++++++\n\n");
 
-	for (int p=0; p < 7; p++)
+	for (int p = 0; p < 7; p++)
 	{
 		FirstReadData(Values, Lists, p);
-		SolveOriginalProblem(Values, Lists,p);
+		SolveOriginalProblem(Values, Lists, p);
 	}
-	
+
 	printf("\n\n+++++++++++++++++ Heuristics END +++++++++++++++++\n\n");
 
 	NewReadData(Values, Lists, 10);
-	ColumnGeneration(Values,Lists);
+	ColumnGeneration(Values, Lists);
 
 	system("pause");
 	return 0;

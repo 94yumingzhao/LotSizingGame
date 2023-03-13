@@ -58,8 +58,8 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists)
 		obj_sum += Lists.master_solns_list[m] * Z_vars[m]; // sum W_m * Z_m
 	}
 
-	IloObjective Obj_OR = IloMaximize(Env_SP, obj_sum); // obj max
-	Model_SP.add(Obj_OR);
+	IloObjective Obj_SP = IloMaximize(Env_SP, obj_sum); // obj max
+	Model_SP.add(Obj_SP);
 	obj_sum.end();
 
 	// number of con 1 == T
@@ -92,7 +92,7 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists)
 	}
 
 	// uppdate machine capacity
-	Values.machine_capacity = 0;
+	//Values.machine_capacity = 0;
 
 	printf("\n/////////// CPLEX SOLVING START ////////////\n\n");
 	Cplex_SP.extract(Model_SP);
@@ -129,39 +129,60 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists)
 //	Cplex_SP.exportModel("LSMM123.lp");
 //}
 
-	int obj_val = Cplex_SP.getObjValue();
-	printf("\n	Obj = %d\n", obj_val);
-	cout << endl;
-
-	for (int m = 0; m < machs_num; m++)
+	if (SP_flag == 0)
 	{
-		int soln_val = Cplex_SP.getValue(Z_vars[m]);
-		printf("	Z_%d= %d\n", m + 1, soln_val);
-		Lists.coalition_solns_list.push_back(soln_val);
+		printf("\n	This SP has NO FEASIBLE solns\n");
 	}
-	cout << endl;
-
-	for (int t = 0; t < prids_num; t++)
+	else
 	{
-		int soln_val = Cplex_SP.getValue(X_vars[t]);
-		printf("	X_%d = %d\n", t + 1, soln_val);
+		printf("\n	This SP has FEASIBLE solns\n");
+
+		int obj_val = Cplex_SP.getObjValue();
+
+		if (obj_val <= 0)
+		{
+			Values.core_find_flag = 1;
+		}
+
+		printf("\n	Obj = %d\n", obj_val);
+		cout << endl;
+
+		Lists.coalition_solns_list.clear();
+		for (int m = 0; m < machs_num; m++)
+		{
+			int soln_val = Cplex_SP.getValue(Z_vars[m]);
+			printf("	Z_%d= %d\n", m + 1, soln_val);
+			Lists.coalition_solns_list.push_back(soln_val);
+		}
+		cout << endl;
+
+		for (int t = 0; t < prids_num; t++)
+		{
+			int soln_val = Cplex_SP.getValue(X_vars[t]);
+			printf("	X_%d = %d\n", t + 1, soln_val);
+		}
+		cout << endl;
+
+		for (int t = 0; t < prids_num; t++)
+		{
+			int soln_val = Cplex_SP.getValue(Y_vars[t]);
+			printf("	Y_%d= %d\n", t + 1, soln_val);
+		}
+		cout << endl;
+
+		for (int t = 0; t < prids_num; t++)
+		{
+			int soln_val = Cplex_SP.getValue(I_vars[t]);
+			printf("	I_%d= %d\n", t + 1, soln_val);
+		}
+		cout << endl;
 	}
-	cout << endl;
 
-	for (int t = 0; t < prids_num; t++)
-	{
-		int soln_val = Cplex_SP.getValue(Y_vars[t]);
-		printf("	Y_%d= %d\n", t + 1, soln_val);
-	}
-	cout << endl;
-
-	for (int t = 0; t < prids_num; t++)
-	{
-		int soln_val = Cplex_SP.getValue(I_vars[t]);
-		printf("	I_%d= %d\n", t + 1, soln_val);
-	}	
-	cout << endl;
-
+	Obj_SP.removeAllProperties();
+	Obj_SP.end();
+	Model_SP.removeAllProperties();
+	Model_SP.end();
+	Env_SP.removeAllProperties();
 	Env_SP.end();
 
 	cout << endl;

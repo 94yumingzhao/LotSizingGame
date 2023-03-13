@@ -6,13 +6,12 @@ Core allocation master problem
 #include "GMLS.h"
 using namespace std;
 
-void SolveFirstMasterProblem(
-	All_Values& Values,
-	All_Lists& Lists,
-	IloEnv& Env_MP,
-	IloModel& Model_MP,
-	IloObjective& Obj_MP)
+void SolveFirstMasterProblem(All_Values& Values,All_Lists& Lists)
 {
+	IloEnv Env_MP; // init cplex environment
+	IloModel Model_MP(Env_MP); // init cplex model
+	IloObjective Obj_MP(Env_MP); // init obj
+
 	int machs_num = Values.machs_num;
 
 	/*************** cplex modeling by columns***************/
@@ -171,26 +170,29 @@ void SolveFirstMasterProblem(
 	printf("\n	////////// Status //////////\n\n");
 
 	if (MP_flag == 0)
+	{
 		printf("	The FIRST MP has NO feasible solutions\n");
-	if (MP_flag == 1)
+	}
+	else
+	{
 		printf("	The FIRST MP has feasible solutions\n");
 
-	IloNum Obj_value = Cplex_MP.getObjValue();
-	printf("\n	The OBJECTIVE VALUE is %d\n", Obj_value);
+		int Obj_value = Cplex_MP.getObjValue();
+		printf("\n	The OBJECTIVE VALUE is %d\n", Obj_value);
 
-	printf("\n	/////////// W /////////\n\n");
+		printf("\n	/////////// W /////////\n\n");
 
-	for (int col = 0; col < cols_num; col++)
-	{
-		IloNum w_soln_val = Cplex_MP.getValue(w_vars[col]);
-		printf("	W_%d = %d\n", col +1,  w_soln_val);
-		Lists.master_solns_list.push_back(w_soln_val);
+		for (int col = 0; col < cols_num; col++)
+		{
+			int w_soln_val = Cplex_MP.getValue(w_vars[col]);
+			printf("	W_%d = %d\n", col + 1, w_soln_val);
+			Lists.master_solns_list.push_back(w_soln_val);
+		}
+
+		int v_soln_val = Cplex_MP.getValue(v_var);
+		printf("	V = %d\n", v_soln_val);
 	}
 
-	IloNum v_soln_val = Cplex_MP.getValue(v_var);
-	printf("	V = %d\n", v_soln_val);
-
-	printf("\n	////////// Dual //////////\n\n");
 	
 	//for (int m = 0; m < machs_num; m++)
 	//{
@@ -199,8 +201,12 @@ void SolveFirstMasterProblem(
 	//	Lists.dual_prices_list.push_back(MP_dual_price);
 	//	printf("Dual_%d = %d\n", m+1, MP_dual_price);
 	//}
-	
 
+	Obj_MP.removeAllProperties();
+	Obj_MP.end();
+	Model_MP.removeAllProperties();
+	Model_MP.end();
+	Env_MP.removeAllProperties();
 	Env_MP.end();
 
 	cout << endl;

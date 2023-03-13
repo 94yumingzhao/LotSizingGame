@@ -5,16 +5,27 @@ using namespace std;
 
 void ColumnGeneration(All_Values& Values, All_Lists& Lists)
 {
-	IloEnv Env_MP; // init cplex environment
-	IloModel Model_MP(Env_MP); // init cplex model
-	IloObjective Obj_MP(Env_MP); // init obj
-
-	SolveFirstMasterProblem(Values, Lists, Env_MP, Model_MP, Obj_MP);
+	SolveFirstMasterProblem(Values, Lists);
 	SolveSubProblem(Values, Lists);
 
 	while (1)
 	{
-		SolveUpdateMasterProblem(Values, Lists, Env_MP, Model_MP, Obj_MP);
+		SolveUpdateMasterProblem(Values, Lists);
 		SolveSubProblem(Values, Lists);
+
+		if (Values.core_find_flag == 1)
+		{
+			printf("\n///////////////////////////////////////////////\n");
+			printf("\n	A point in the core is find!\n");
+			int machs_num = Values.machs_num;
+			printf("\n	The point is ( ");
+			for (int k = 0; k < machs_num; k++)
+			{
+				printf("%d ", Lists.master_solns_list[k]);
+			}
+			printf(")\n");
+			printf("\n///////////////////////////////////////////////\n\n\n\n");
+			break;
+		}
 	}
 }

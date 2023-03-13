@@ -146,6 +146,16 @@
     <None Include="..\machine01.csv" />
     <None Include="..\machine02.csv" />
     <None Include="..\machine03.csv" />
+    <None Include="LSMM1.lp" />
+    <None Include="LSMM12.lp" />
+    <None Include="LSMM123.lp" />
+    <None Include="LSMM13.lp" />
+    <None Include="LSMM2.lp" />
+    <None Include="LSMM23.lp" />
+    <None Include="LSMM3.lp" />
+    <None Include="SubProblem1.lp" />
+    <None Include="TheFirstMasterProblemR.lp" />
+    <None Include="TheNewMasterProblemR.lp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
