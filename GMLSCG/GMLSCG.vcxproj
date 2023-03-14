@@ -34,6 +34,9 @@
     <None Include="machine01.csv" />
     <None Include="machine02.csv" />
     <None Include="machine03.csv" />
+    <None Include="SubProblem1.lp" />
+    <None Include="TheFirstMasterProblemR.lp" />
+    <None Include="TheNewMasterProblemR.lp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -122,6 +125,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;IL_STD</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Program Files\IBM\ILOG\CPLEX_Studio_Community201\cplex\include;C:\Program Files\IBM\ILOG\CPLEX_Studio_Community201\concert\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -1,79 +1,78 @@
-﻿// 2023-03-12
+﻿//2023-03-14
 
 #include "GMLS.h"
 using namespace std;
 
-void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
+void SolveUpdateMasterProblem(
+	All_Values& Values,
+	All_Lists& Lists,
+	IloEnv& Env_MP,
+	IloModel& Model_MP,
+	IloObjective& Obj_MP,
+	IloRangeArray& Cons_list,
+	IloNumVarArray& K_vars_list,
+	IloNumVarArray& V_vars_list)
 {
-	IloEnv Env_MP; // init cplex environment
-	IloModel Model_MP(Env_MP); // init cplex model
-	IloObjective Obj_MP(Env_MP); // init obj
-
 	int machs_num = Values.machs_num;
 
 	// add new row to the matrix
-	vector<int> new_row;
-	int cols_num = machs_num;
-	for (int col = 0; col < cols_num; col++)
-	{
-		int soln_val = Lists.SP_solns_list[col];
-		new_row.push_back(soln_val);
-	}
-	Lists.model_matrix.push_back(new_row);
-
-	// set var V
-	string v_name = "V";
-	IloNum v_min = 0;
-	IloNum v_max = IloInfinity;
-	IloNumVar v_var = IloNumVar(Env_MP, 0, IloInfinity, ILOINT, v_name.c_str()); // V >=0
-
-	// set var W
-	IloNumVarArray w_vars(Env_MP);
-	for (int m = 0; m < machs_num; m++)
-	{
-		cout << m << endl;
-		string w_name = "W_" + to_string(m + 1);
-		IloNum w_min = 0;
-		IloNum w_max = IloInfinity;
-
-		IloNumVar w_var = IloNumVar(Env_MP, w_min, w_max, ILOINT, w_name.c_str()); // W >=0
-		w_vars.add(w_var);
-	}
-
-	// set obj
-	IloExpr obj_sum(Env_MP);
-	obj_sum = v_var;
-	Obj_MP = IloMinimize(Env_MP, obj_sum); // obj MIN
-	Model_MP.add(Obj_MP); // add obj
-	obj_sum.end();
-
-	// set cons
-	int rows_num = Lists.model_matrix.size();
+	vector<int> new_col;
+	int rows_num = machs_num;
 	for (int row = 0; row < rows_num; row++)
 	{
-		IloExpr con_sum(Env_MP);
-		for (int col = 0; col < cols_num; col++)
+		int soln_val = Lists.SP_solns_list[row];
+		new_col.push_back(soln_val);
+	}
+
+
+	int cltn_cost = 0; // coalition cost of the new col's pattern
+	int cltn_pats_num = Lists.coalitions_list.size();
+	
+	// find the coalition cost of this new col's pattern
+	for (int pat = 0; pat < cltn_pats_num; pat++)
+	{
+		int same_pat_flag = -1;
+		for (int row = 0; row < rows_num; row++)
 		{
-			con_sum += Lists.model_matrix[row][col] * w_vars[col];
+			if (new_col[row]!=
+				Lists.coalitions_list[pat].pattern[row])
+			{
+				same_pat_flag = 0;
+				cout << endl;
+			}
 		}
-		if (row == 0)
+		if (same_pat_flag == -1) // the new col's pattern == this coalition's pattern
 		{
-			Model_MP.add(con_sum == Lists.coalition_cost_list[row]); // con == c(N)
+			cltn_cost = Lists.coalitions_list[pat].cost;
+			cout << endl;
+			break;
 		}
-		if (row > 0)
-		{
-			Model_MP.add(con_sum - v_var <= Lists.coalition_cost_list[row]); // con <= c(S)
-		}
-		con_sum.end();
+	}
+
+	Lists.model_matrix.push_back(new_col);
+	int cols_num = Lists.model_matrix.size();
+
+	IloNum obj_para = cltn_cost; // obj coeff == c(N)
+	IloNumColumn CplexCol = Obj_MP(obj_para); // Init one column
+
+	for (int row = 0; row < rows_num; row++)
+	{
+		IloNum para_val = new_col[row];
+		CplexCol += Cons_list[row](para_val); // update rows in this column
+
+		string k_name = "K_" + to_string(cols_num + 1);
+		IloNum k_min = 0;
+		IloNum k_max = IloInfinity;
+		IloNumVar k_var(CplexCol, k_min, k_max, ILOFLOAT, k_name.c_str()); // Init a var accoding to this column, var >=0
+		K_vars_list.add(k_var); // add this var to vars_list list
 	}
 
 	printf("\n/////////// CPLEX SOLVING START ////////////\n\n");
-	IloCplex Cplex_MP(Env_MP); // init cplex solver
+	IloCplex Cplex_MP(Env_MP); // Init cplex solver
 	Cplex_MP.extract(Model_MP);
 	Cplex_MP.exportModel("TheNewMasterProblemR.lp");
 	bool MP_flag = Cplex_MP.solve(); // solve the cplex model
 	printf("\n/////////// CPLEX SOLVING END ////////////\n");
-
 
 	if (MP_flag == 0)
 	{
@@ -91,24 +90,24 @@ void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 		Lists.MP_solns_list.clear();
 		for (int col = 0; col < cols_num; col++)
 		{
-			int w_soln_val = Cplex_MP.getValue(w_vars[col]);
-			printf("	W_%d = %d\n", col + 1, w_soln_val);
-			Lists.MP_solns_list.push_back(w_soln_val);
+			int k_soln_val = Cplex_MP.getValue(K_vars_list[col]);
+			printf("	k_%d = %d\n", col + 1, k_soln_val);
+			Lists.MP_solns_list.push_back(k_soln_val);
 		}
 
-		int v_soln_val = Cplex_MP.getValue(v_var);
-		printf("	V = %d\n", v_soln_val);
-
+		Lists.dual_prices_list.clear();
+		for (int row = 0; row < rows_num; row++)
+		{
+			IloNum MP_dual_price = Cplex_MP.getDual((Cons_list)[row]);
+			Lists.dual_prices_list.push_back(MP_dual_price);
+			printf("\n	Dual_%d = %f", row + 1, MP_dual_price);
+		}
+		//int v_soln_val = Cplex_MP.getValue(V_vars_list[0]);
+		//printf("	V = %d\n", v_soln_val);
 	}
 
-	Obj_MP.removeAllProperties();
-	Obj_MP.end();
 	Cplex_MP.removeAllProperties();
 	Cplex_MP.end();
-	Model_MP.removeAllProperties();
-	Model_MP.end();
-	Env_MP.removeAllProperties();
-	Env_MP.end();
 
 	cout << endl;
 }

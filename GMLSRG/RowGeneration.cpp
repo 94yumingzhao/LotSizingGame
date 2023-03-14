@@ -3,7 +3,7 @@
 #include "GMLS.h"
 using namespace std;
 
-void ColumnGeneration(All_Values& Values, All_Lists& Lists)
+void RowGeneration(All_Values& Values, All_Lists& Lists)
 {
 	SolveFirstMasterProblem(Values, Lists);
 	SolveSubProblem(Values, Lists);
@@ -21,7 +21,7 @@ void ColumnGeneration(All_Values& Values, All_Lists& Lists)
 			printf("\n	The point is ( ");
 			for (int k = 0; k < machs_num; k++)
 			{
-				printf("%d ", Lists.MP_solns_list[k]);
+				printf("%.2f ", Lists.MP_solns_list[k]);
 			}
 			printf(")\n");
 			printf("\n///////////////////////////////////////////////\n\n\n\n");

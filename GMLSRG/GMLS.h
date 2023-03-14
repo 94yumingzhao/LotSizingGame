@@ -95,6 +95,6 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists);
 
 void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists);
 
-void ColumnGeneration(All_Values& Values, All_Lists& Lists);
+void RowGeneration(All_Values& Values, All_Lists& Lists);
 
 #pragma once

@@ -80,7 +80,7 @@ void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine03.csv");
 	}
 
-	// init vector
+	// Init vector
 	for (int t = 0; t < prids_num; t++)
 	{
 		Parameter_Struct pm;
@@ -192,7 +192,7 @@ void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 	file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine02.csv");
 	file_c3.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine03.csv");
 
-	// init demand_matrix
+	// Init demand_matrix
 	for (int m = 0; m < machs_num; m++)
 	{
 		vector<int> demand_list;
@@ -238,7 +238,7 @@ void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 			}
 		}
 
-		// init vector<> primal_parameters
+		// Init vector<> primal_parameters
 		for (int t = 0; t < prids_num; t++)
 		{
 			Parameter_Struct pm;

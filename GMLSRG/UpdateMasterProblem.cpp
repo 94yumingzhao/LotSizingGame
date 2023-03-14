@@ -5,9 +5,9 @@ using namespace std;
 
 void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 {
-	IloEnv Env_MP; // init cplex environment
-	IloModel Model_MP(Env_MP); // init cplex model
-	IloObjective Obj_MP(Env_MP); // init obj
+	IloEnv Env_MP; // Init cplex environment
+	IloModel Model_MP(Env_MP); // Init cplex model
+	IloObjective Obj_MP(Env_MP); // Init obj
 
 	int machs_num = Values.machs_num;
 
@@ -28,7 +28,7 @@ void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 	IloNumVar v_var = IloNumVar(Env_MP, 0, IloInfinity, ILOINT, v_name.c_str()); // V >=0
 
 	// set var W
-	IloNumVarArray w_vars(Env_MP);
+	IloNumVarArray W_vars_list(Env_MP);
 	for (int m = 0; m < machs_num; m++)
 	{
 		cout << m << endl;
@@ -37,12 +37,19 @@ void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 		IloNum w_max = IloInfinity;
 
 		IloNumVar w_var = IloNumVar(Env_MP, w_min, w_max, ILOINT, w_name.c_str()); // W >=0
-		w_vars.add(w_var);
+		W_vars_list.add(w_var);
 	}
 
-	// set obj
+
 	IloExpr obj_sum(Env_MP);
-	obj_sum = v_var;
+
+	// obj_sum = v_var; // model A
+
+	for (int col = 0; col < cols_num; col++) 	// model B
+	{
+		obj_sum += W_vars_list[col];
+	}
+
 	Obj_MP = IloMinimize(Env_MP, obj_sum); // obj MIN
 	Model_MP.add(Obj_MP); // add obj
 	obj_sum.end();
@@ -54,7 +61,7 @@ void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 		IloExpr con_sum(Env_MP);
 		for (int col = 0; col < cols_num; col++)
 		{
-			con_sum += Lists.model_matrix[row][col] * w_vars[col];
+			con_sum += Lists.model_matrix[row][col] * W_vars_list[col];
 		}
 		if (row == 0)
 		{
@@ -62,13 +69,14 @@ void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 		}
 		if (row > 0)
 		{
-			Model_MP.add(con_sum - v_var <= Lists.coalition_cost_list[row]); // con <= c(S)
+			// Model_MP.add(con_sum - v_var <= Lists.coalition_cost_list[row]); // con <= c(S) // model A
+			Model_MP.add(con_sum <= Lists.coalition_cost_list[row]); // con <= c(S) // model B
 		}
 		con_sum.end();
 	}
 
 	printf("\n/////////// CPLEX SOLVING START ////////////\n\n");
-	IloCplex Cplex_MP(Env_MP); // init cplex solver
+	IloCplex Cplex_MP(Env_MP); // Init cplex solver
 	Cplex_MP.extract(Model_MP);
 	Cplex_MP.exportModel("TheNewMasterProblemR.lp");
 	bool MP_flag = Cplex_MP.solve(); // solve the cplex model
@@ -91,13 +99,14 @@ void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 		Lists.MP_solns_list.clear();
 		for (int col = 0; col < cols_num; col++)
 		{
-			int w_soln_val = Cplex_MP.getValue(w_vars[col]);
+			int w_soln_val = Cplex_MP.getValue(W_vars_list[col]);
 			printf("	W_%d = %d\n", col + 1, w_soln_val);
 			Lists.MP_solns_list.push_back(w_soln_val);
 		}
 
-		int v_soln_val = Cplex_MP.getValue(v_var);
-		printf("	V = %d\n", v_soln_val);
+		// model A
+		//int v_soln_val = Cplex_MP.getValue(v_var);
+		//printf("	V = %d\n", v_soln_val);
 
 	}
 
@@ -107,6 +116,8 @@ void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 	Cplex_MP.end();
 	Model_MP.removeAllProperties();
 	Model_MP.end();
+	
+	// must end IloEnv object as the last one
 	Env_MP.removeAllProperties();
 	Env_MP.end();
 

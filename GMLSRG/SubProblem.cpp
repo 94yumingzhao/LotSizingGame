@@ -14,10 +14,10 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists)
 	IloCplex Cplex_SP(Env_SP);
 
 	// vars
-	IloArray<IloNumVar> X_vars(Env_SP);
-	IloArray<IloNumVar> Y_vars(Env_SP);
-	IloArray<IloNumVar> I_vars(Env_SP);
-	IloArray<IloNumVar> Z_vars(Env_SP);
+	IloArray<IloNumVar> X_vars_list(Env_SP);
+	IloArray<IloNumVar> Y_vars_list(Env_SP);
+	IloArray<IloNumVar> I_vars_list(Env_SP);
+	IloArray<IloNumVar> Z_vars_list(Env_SP);
 
 	for (int t = 0; t < prids_num; t++)
 	{
@@ -29,37 +29,37 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists)
 		IloNumVar Y_var = IloNumVar(Env_SP, 0, 1, ILOINT, Y_name.c_str());
 		IloNumVar I_var = IloNumVar(Env_SP, 0, IloInfinity, ILOINT, I_name.c_str());
 
-		X_vars.add(X_var);
-		Y_vars.add(Y_var);
-		I_vars.add(I_var);
+		X_vars_list.add(X_var);
+		Y_vars_list.add(Y_var);
+		I_vars_list.add(I_var);
 	}
 
 	for (int m = 0; m < machs_num; m++)
 	{
 		string Z_name = "Z_" + to_string(m + 1);
-		Z_vars.add(IloNumVar(Env_SP, 0, 1, ILOINT, Z_name.c_str()));
+		Z_vars_list.add(IloNumVar(Env_SP, 0, 1, ILOINT, Z_name.c_str()));
 	}
 
 	// obj
 	IloExpr obj_sum(Env_SP);
 	for (int t = 0; t < prids_num; t++)
 	{
-		obj_sum -= Lists.primal_parameters[t].c_X * X_vars[t];
+		obj_sum -= Lists.primal_parameters[t].c_X * X_vars_list[t];
 	}
 
 	for (int t = 0; t < prids_num; t++)
 	{
-		obj_sum -= Lists.primal_parameters[t].c_Y * Y_vars[t];
+		obj_sum -= Lists.primal_parameters[t].c_Y * Y_vars_list[t];
 	}
 
 	for (int t = 0; t < prids_num; t++)
 	{
-		obj_sum -= Lists.primal_parameters[t].c_I * I_vars[t];
+		obj_sum -= Lists.primal_parameters[t].c_I * I_vars_list[t];
 	}
 
 	for (int m = 0; m < machs_num; m++)
 	{
-		obj_sum += Lists.MP_solns_list[m] * Z_vars[m]; // sum W_m * Z_m
+		obj_sum += Lists.MP_solns_list[m] * Z_vars_list[m]; // sum W_m * Z_m
 	}
 
 	IloObjective Obj_SP = IloMaximize(Env_SP, obj_sum); // obj max
@@ -73,17 +73,17 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists)
 
 		for (int m = 0; m < machs_num; m++)
 		{
-			con_sum += Lists.demand_matrix[m][t] * Z_vars[m]; // sum d_mt *  Z_m
+			con_sum += Lists.demand_matrix[m][t] * Z_vars_list[m]; // sum d_mt *  Z_m
 		}
 
 		if (t == 0)
 		{
-			Model_SP.add(X_vars[t] == con_sum + I_vars[t]);
+			Model_SP.add(X_vars_list[t] == con_sum + I_vars_list[t]);
 		}
 
 		if (t > 0)
 		{
-			Model_SP.add(X_vars[t] + I_vars[t - 1] == con_sum + I_vars[t]);
+			Model_SP.add(X_vars_list[t] + I_vars_list[t - 1] == con_sum + I_vars_list[t]);
 		}
 
 		con_sum.end();
@@ -92,7 +92,7 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists)
 	// number of con 2 == T 
 	for (int t = 0; t < prids_num; t++)
 	{
-		Model_SP.add(X_vars[t] <= Values.machine_capacity * Y_vars[t]);
+		Model_SP.add(X_vars_list[t] <= Values.machine_capacity * Y_vars_list[t]);
 	}
 
 	printf("\n/////////// CPLEX SOLVING START ////////////\n\n");
@@ -122,7 +122,7 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists)
 		Lists.SP_solns_list.clear();
 		for (int m = 0; m < machs_num; m++)
 		{
-			int soln_val = Cplex_SP.getValue(Z_vars[m]);
+			int soln_val = Cplex_SP.getValue(Z_vars_list[m]);
 			printf("	Z_%d= %d\n", m + 1, soln_val);
 			Lists.SP_solns_list.push_back(soln_val);
 		}
@@ -130,21 +130,21 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists)
 
 		for (int t = 0; t < prids_num; t++)
 		{
-			int soln_val = Cplex_SP.getValue(X_vars[t]);
+			int soln_val = Cplex_SP.getValue(X_vars_list[t]);
 			printf("	X_%d = %d\n", t + 1, soln_val);
 		}
 		cout << endl;
 
 		for (int t = 0; t < prids_num; t++)
 		{
-			int soln_val = Cplex_SP.getValue(Y_vars[t]);
+			int soln_val = Cplex_SP.getValue(Y_vars_list[t]);
 			printf("	Y_%d= %d\n", t + 1, soln_val);
 		}
 		cout << endl;
 
 		for (int t = 0; t < prids_num; t++)
 		{
-			int soln_val = Cplex_SP.getValue(I_vars[t]);
+			int soln_val = Cplex_SP.getValue(I_vars_list[t]);
 			printf("	I_%d= %d\n", t + 1, soln_val);
 		}
 		cout << endl;
@@ -156,6 +156,8 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists)
 	Cplex_SP.end();
 	Model_SP.removeAllProperties();
 	Model_SP.end();
+
+	// must end IloEnv object as the last one
 	Env_SP.removeAllProperties();
 	Env_SP.end();
 
