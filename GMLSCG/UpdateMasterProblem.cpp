@@ -16,10 +16,10 @@ void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 	int cols_num = machs_num;
 	for (int col = 0; col < cols_num; col++)
 	{
-		int soln_val = Lists.coalition_solns_list[col];
+		int soln_val = Lists.SP_solns_list[col];
 		new_row.push_back(soln_val);
 	}
-	Lists.model_matrix_R.push_back(new_row);
+	Lists.model_matrix.push_back(new_row);
 
 	// set var V
 	string v_name = "V";
@@ -48,13 +48,13 @@ void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 	obj_sum.end();
 
 	// set cons
-	int rows_num = Lists.model_matrix_R.size();
+	int rows_num = Lists.model_matrix.size();
 	for (int row = 0; row < rows_num; row++)
 	{
 		IloExpr con_sum(Env_MP);
 		for (int col = 0; col < cols_num; col++)
 		{
-			con_sum += Lists.model_matrix_R[row][col] * w_vars[col];
+			con_sum += Lists.model_matrix[row][col] * w_vars[col];
 		}
 		if (row == 0)
 		{
@@ -88,12 +88,12 @@ void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 
 		printf("\n	//////////W//////////\n\n");
 
-		Lists.master_solns_list.clear();
+		Lists.MP_solns_list.clear();
 		for (int col = 0; col < cols_num; col++)
 		{
 			int w_soln_val = Cplex_MP.getValue(w_vars[col]);
 			printf("	W_%d = %d\n", col + 1, w_soln_val);
-			Lists.master_solns_list.push_back(w_soln_val);
+			Lists.MP_solns_list.push_back(w_soln_val);
 		}
 
 		int v_soln_val = Cplex_MP.getValue(v_var);
@@ -103,6 +103,8 @@ void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 
 	Obj_MP.removeAllProperties();
 	Obj_MP.end();
+	Cplex_MP.removeAllProperties();
+	Cplex_MP.end();
 	Model_MP.removeAllProperties();
 	Model_MP.end();
 	Env_MP.removeAllProperties();

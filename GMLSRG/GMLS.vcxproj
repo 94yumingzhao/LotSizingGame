@@ -24,6 +24,7 @@
     <ProjectGuid>{ff4ff8dd-3a96-48ea-8504-6f9f56af5778}</ProjectGuid>
     <RootNamespace>GMLS</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>GMLSRG</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -131,21 +132,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\ColumnGeneration.cpp" />
-    <ClCompile Include="..\FirstMasterProblem.cpp" />
-    <ClCompile Include="..\Main.cpp" />
-    <ClCompile Include="..\OriginalProblem.cpp" />
-    <ClCompile Include="..\ReadData.cpp" />
-    <ClCompile Include="..\SubProblem.cpp" />
-    <ClCompile Include="..\UpdateMasterProblem.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\GMLS.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\machine01.csv" />
-    <None Include="..\machine02.csv" />
-    <None Include="..\machine03.csv" />
     <None Include="LSMM1.lp" />
     <None Include="LSMM12.lp" />
     <None Include="LSMM123.lp" />
@@ -153,9 +139,24 @@
     <None Include="LSMM2.lp" />
     <None Include="LSMM23.lp" />
     <None Include="LSMM3.lp" />
+    <None Include="machine01.csv" />
+    <None Include="machine02.csv" />
+    <None Include="machine03.csv" />
     <None Include="SubProblem1.lp" />
     <None Include="TheFirstMasterProblemR.lp" />
     <None Include="TheNewMasterProblemR.lp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="RowGeneration.cpp" />
+    <ClCompile Include="FirstMasterProblem.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="OriginalProblem.cpp" />
+    <ClCompile Include="ReadData.cpp" />
+    <ClCompile Include="SubProblem.cpp" />
+    <ClCompile Include="UpdateMasterProblem.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GMLS.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

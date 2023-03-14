@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="src">
-      <UniqueIdentifier>{973cd613-d93f-489e-8482-62a59abddc4a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="models">
       <UniqueIdentifier>{99b0a96e-c562-456d-b7d3-ea4353f9cac4}</UniqueIdentifier>
     </Filter>
@@ -15,49 +12,12 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="源文件">
+    <Filter Include="src">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\ColumnGeneration.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\FirstMasterProblem.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\OriginalProblem.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ReadData.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\SubProblem.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\UpdateMasterProblem.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\GMLS.h">
-      <Filter>header</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\machine01.csv">
-      <Filter>datas</Filter>
-    </None>
-    <None Include="..\machine02.csv">
-      <Filter>datas</Filter>
-    </None>
-    <None Include="..\machine03.csv">
-      <Filter>datas</Filter>
-    </None>
     <None Include="LSMM1.lp">
       <Filter>models</Filter>
     </None>
@@ -88,5 +48,42 @@
     <None Include="TheNewMasterProblemR.lp">
       <Filter>models</Filter>
     </None>
+    <None Include="machine01.csv">
+      <Filter>datas</Filter>
+    </None>
+    <None Include="machine02.csv">
+      <Filter>datas</Filter>
+    </None>
+    <None Include="machine03.csv">
+      <Filter>datas</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="RowGeneration.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="FirstMasterProblem.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="OriginalProblem.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadData.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="SubProblem.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="UpdateMasterProblem.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GMLS.h">
+      <Filter>header</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

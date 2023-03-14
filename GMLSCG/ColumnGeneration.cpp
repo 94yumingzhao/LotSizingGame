@@ -21,7 +21,7 @@ void ColumnGeneration(All_Values& Values, All_Lists& Lists)
 			printf("\n	The point is ( ");
 			for (int k = 0; k < machs_num; k++)
 			{
-				printf("%d ", Lists.master_solns_list[k]);
+				printf("%d ", Lists.MP_solns_list[k]);
 			}
 			printf(")\n");
 			printf("\n///////////////////////////////////////////////\n\n\n\n");

@@ -84,7 +84,7 @@ void SolveFirstMasterProblem(All_Values& Values,All_Lists& Lists)
 	{
 		first_row.push_back(1);
 	}
-	Lists.model_matrix_R.push_back(first_row);
+	Lists.model_matrix.push_back(first_row);
 
 	// add rows of single machine coalitions to the matrix
 	for (int row = 0; row < rows_num; row++)
@@ -101,7 +101,7 @@ void SolveFirstMasterProblem(All_Values& Values,All_Lists& Lists)
 				temp_row.push_back(0);
 			}
 		}
-		Lists.model_matrix_R.push_back(temp_row);
+		Lists.model_matrix.push_back(temp_row);
 	}
 
 	// set var V
@@ -126,16 +126,6 @@ void SolveFirstMasterProblem(All_Values& Values,All_Lists& Lists)
 	// obj  new model
 	obj_sum = v_var;
 	Obj_MP = IloMinimize(Env_MP, obj_sum); // obj MIN
-
-	// obj  orginal model
-	/*
-	for (int m = 0; m < machs_num; m++)
-	{
-		obj_sum += w_vars[m]; // obj coeff == 1
-	}
-	Obj_MP = IloMaximize(Env_MP, obj_sum); // obj MAX
-	*/
-	
 	Model_MP.add(Obj_MP); // add obj
 	obj_sum.end();
 
@@ -145,7 +135,7 @@ void SolveFirstMasterProblem(All_Values& Values,All_Lists& Lists)
 		IloExpr con_sum(Env_MP);
 		for (int col = 0; col < cols_num; col++)
 		{		
-			con_sum += Lists.model_matrix_R[row][col]* w_vars[col];
+			con_sum += Lists.model_matrix[row][col]* w_vars[col];
 		}
 		if (row == 0)
 		{
@@ -186,7 +176,7 @@ void SolveFirstMasterProblem(All_Values& Values,All_Lists& Lists)
 		{
 			int w_soln_val = Cplex_MP.getValue(w_vars[col]);
 			printf("	W_%d = %d\n", col + 1, w_soln_val);
-			Lists.master_solns_list.push_back(w_soln_val);
+			Lists.MP_solns_list.push_back(w_soln_val);
 		}
 
 		int v_soln_val = Cplex_MP.getValue(v_var);
@@ -204,6 +194,8 @@ void SolveFirstMasterProblem(All_Values& Values,All_Lists& Lists)
 
 	Obj_MP.removeAllProperties();
 	Obj_MP.end();
+	Cplex_MP.removeAllProperties();
+	Cplex_MP.end();
 	Model_MP.removeAllProperties();
 	Model_MP.end();
 	Env_MP.removeAllProperties();

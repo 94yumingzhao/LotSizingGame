@@ -44,40 +44,40 @@ void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 	// coalition class 0
 	if (coalition_flag == 0)
 	{
-		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine01.csv");
-		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/machine02.csv");
-		file_c3.open("C:/Users/YMZhao/Desktop/GMLS/machine03.csv");
+		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine01.csv");
+		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine02.csv");
+		file_c3.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine03.csv");
 	}
 
 	// coalition class 1
 	if (coalition_flag == 1)
 	{
-		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine01.csv");
+		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine01.csv");
 	}
 	if (coalition_flag == 2)
 	{
-		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine02.csv");
+		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine02.csv");
 	}
 	if (coalition_flag == 3)
 	{
-		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine03.csv");
+		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine03.csv");
 	}
 
 	// coalition class 2
 	if (coalition_flag == 4)
 	{
-		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine01.csv");
-		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/machine02.csv");
+		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine01.csv");
+		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine02.csv");
 	}
 	if (coalition_flag == 5)
 	{
-		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine01.csv");
-		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/machine03.csv");
+		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine01.csv");
+		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine03.csv");
 	}
 	if (coalition_flag == 6)
 	{
-		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine02.csv");
-		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/machine03.csv");
+		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine02.csv");
+		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine03.csv");
 	}
 
 	// init vector
@@ -188,9 +188,9 @@ void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 	vector<string> linedatas_c2;
 	vector<string> linedatas_c3;
 
-	file_c1.open("C:/Users/YMZhao/Desktop/GMLS/machine01.csv");
-	file_c2.open("C:/Users/YMZhao/Desktop/GMLS/machine02.csv");
-	file_c3.open("C:/Users/YMZhao/Desktop/GMLS/machine03.csv");
+	file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine01.csv");
+	file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine02.csv");
+	file_c3.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine03.csv");
 
 	// init demand_matrix
 	for (int m = 0; m < machs_num; m++)
