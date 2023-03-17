@@ -14,3 +14,12 @@ Subject To
  c3: K_1 + K_4 >= 1  
 
 ++++++++++++++++  Solving with row generation in GMLSRG file  ++++++++++++++++  
+
+Minimize  
+ obj1: W_1 + W_2 + W_3  
+ 
+Subject To  
+ c1: W_1 + W_2 + W_3  = 1393  
+ c2: W_1 <= 644  
+ c3: W_2 <= 511  
+ c4: W_3 <= 482  
