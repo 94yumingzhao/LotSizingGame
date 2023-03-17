@@ -3,7 +3,7 @@ Solving single-item multi-machine lot sizing core allocation cooperative game wi
 
 Core allocation master problem + Lot sizing sub problem  
 
-++++++++++++++++  Solving with column generation in GMLSCG file ++++++++++++++++  
+++++++++++++++++  column generation master problem ++++++++++++++++  
 
 Minimize  
  obj1: 1393 K_1 + 644 K_2 + 511 K_3 + 482 K_4  
@@ -13,7 +13,7 @@ Subject To
  c2: K_1 + K_3 >= 1  
  c3: K_1 + K_4 >= 1  
 
-++++++++++++++++  Solving with row generation in GMLSRG file  ++++++++++++++++  
+++++++++++++++++  row generation master problem  ++++++++++++++++  
 
 Minimize  
  obj1: W_1 + W_2 + W_3  
