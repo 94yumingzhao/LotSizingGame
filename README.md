@@ -1,6 +1,18 @@
 # SIMM Lot Sizing Cooperative Game
 Solving single-item multi-machine lot sizing core allocation cooperative game with column generation and row generation in C++  
 
+About lot sizing:  
+https://en.wikipedia.org/wiki/Dynamic_lot-size_model  
+
+About cooperative game:  
+https://en.wikipedia.org/wiki/Cooperative_game_theory  
+
+About core:  
+https://en.wikipedia.org/wiki/Core_(game_theory)  
+
+About column generation:  
+https://en.wikipedia.org/wiki/Column_generation  
+
 Core allocation master problem + Lot sizing sub problem  
 
 ++++++++++++++++  column generation master problem ++++++++++++++++  
