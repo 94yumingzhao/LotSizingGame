@@ -21,7 +21,8 @@ void RowGeneration(All_Values& Values, All_Lists& Lists)
 			printf("\n	The point is ( ");
 			for (int k = 0; k < machs_num; k++)
 			{
-				printf("%.2f ", Lists.MP_solns_list[k]);
+				IloNum stable_cost = Lists.MP_solns_list[k];
+				printf("%.2f ", stable_cost);
 			}
 			printf(")\n");
 			printf("\n///////////////////////////////////////////////\n\n\n\n");
