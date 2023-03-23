@@ -6,3 +6,7 @@ https://en.wikipedia.org/wiki/Dynamic_lot-size_model
 https://en.wikipedia.org/wiki/Cooperative_game_theory  
 https://en.wikipedia.org/wiki/Core_(game_theory)  
 https://en.wikipedia.org/wiki/Column_generation  
+
+![image](https://github.com/Baturuym/SIMMLS_GM/blob/master/02.png)  
+
+![image](https://github.com/Baturuym/SIMMLS_GM/blob/master/01.png)
