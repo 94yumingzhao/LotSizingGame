@@ -3,19 +3,18 @@
 #include "GMLS.h"
 using namespace std;
 
-void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
-{
+void SolveUpdateMasterProblem(All_Values& Values, All_Lists& Lists) {
+
 	IloEnv Env_MP; // Init cplex environment
 	IloModel Model_MP(Env_MP); // Init cplex model
 	IloObjective Obj_MP(Env_MP); // Init obj
 
-	int machs_num = Values.machs_num;
+	int all_machs_num = Values.all_machs_num;
 
 	// add new row to the matrix
 	vector<int> new_row;
-	int cols_num = machs_num;
-	for (int col = 0; col < cols_num; col++)
-	{
+	int all_cols_num = all_machs_num;
+	for (int col = 0; col < all_cols_num; col++) {
 		int soln_val = Lists.SP_solns_list[col];
 		new_row.push_back(soln_val);
 	}
@@ -28,51 +27,46 @@ void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 	IloNumVar v_var = IloNumVar(Env_MP, 0, IloInfinity, ILOINT, v_name.c_str()); // V >=0
 
 	// set var W
-	IloNumVarArray W_vars_list(Env_MP);
-	for (int m = 0; m < machs_num; m++)
-	{
+	IloNumVarArray W_Vars(Env_MP);
+	for (int m = 0; m < all_machs_num; m++) {
 		cout << m << endl;
 		string w_name = "W_" + to_string(m + 1);
 		IloNum w_min = 0;
 		IloNum w_max = IloInfinity;
 
-		IloNumVar w_var = IloNumVar(Env_MP, w_min, w_max, ILOINT, w_name.c_str()); // W >=0
-		W_vars_list.add(w_var);
+		IloNumVar W_Var = IloNumVar(Env_MP, w_min, w_max, ILOINT, w_name.c_str()); // W >=0
+		W_Vars.add(W_Var);
 	}
 
 
-	IloExpr obj_sum(Env_MP);
+	IloExpr sum_obj(Env_MP);
 
-	// obj_sum = v_var; // model A
+	// sum_obj = v_var; // model A
 
-	for (int col = 0; col < cols_num; col++) 	// model B
+	for (int col = 0; col < all_cols_num; col++) 	// model B
 	{
-		obj_sum += W_vars_list[col];
+		sum_obj += W_Vars[col];
 	}
 
-	Obj_MP = IloMinimize(Env_MP, obj_sum); // obj MIN
+	Obj_MP = IloMinimize(Env_MP, sum_obj); // obj MIN
 	Model_MP.add(Obj_MP); // add obj
-	obj_sum.end();
+	sum_obj.end();
 
 	// set cons
-	int rows_num = Lists.model_matrix.size();
-	for (int row = 0; row < rows_num; row++)
-	{
-		IloExpr con_sum(Env_MP);
-		for (int col = 0; col < cols_num; col++)
-		{
-			con_sum += Lists.model_matrix[row][col] * W_vars_list[col];
+	int all_rows_num = Lists.model_matrix.size();
+	for (int row = 0; row < all_rows_num; row++) {
+		IloExpr sum_1(Env_MP);
+		for (int col = 0; col < all_cols_num; col++) {
+			sum_1 += Lists.model_matrix[row][col] * W_Vars[col];
 		}
-		if (row == 0)
-		{
-			Model_MP.add(con_sum == Lists.coalition_cost_list[row]); // con == c(N)
+		if (row == 0) {
+			Model_MP.add(sum_1 == Lists.coalition_cost_list[row]); // con == c(N)
 		}
-		if (row > 0)
-		{
-			// Model_MP.add(con_sum - v_var <= Lists.coalition_cost_list[row]); // con <= c(S) // model A
-			Model_MP.add(con_sum <= Lists.coalition_cost_list[row]); // con <= c(S) // model B
+		if (row > 0) {
+			// Model_MP.add(sum_1 - v_var <= Lists.coalition_cost_list[row]); // con <= c(S) // model A
+			Model_MP.add(sum_1 <= Lists.coalition_cost_list[row]); // con <= c(S) // model B
 		}
-		con_sum.end();
+		sum_1.end();
 	}
 
 	printf("\n/////////// CPLEX SOLVING START ////////////\n\n");
@@ -83,12 +77,10 @@ void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 	printf("\n/////////// CPLEX SOLVING END ////////////\n");
 
 
-	if (MP_flag == 0)
-	{
+	if (MP_flag == 0) {
 		printf("\n	This MP has NO feasible solutions\n");
 	}
-	else
-	{
+	else {
 		printf("\n	This MP has feasible solutions\n");
 
 		int Obj_value = Cplex_MP.getObjValue();
@@ -97,9 +89,8 @@ void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 		printf("\n	//////////W//////////\n\n");
 
 		Lists.MP_solns_list.clear();
-		for (int col = 0; col < cols_num; col++)
-		{
-			int w_soln_val = Cplex_MP.getValue(W_vars_list[col]);
+		for (int col = 0; col < all_cols_num; col++) {
+			int w_soln_val = Cplex_MP.getValue(W_Vars[col]);
 			printf("	W_%d = %d\n", col + 1, w_soln_val);
 			Lists.MP_solns_list.push_back(w_soln_val);
 		}
@@ -116,7 +107,7 @@ void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists)
 	Cplex_MP.end();
 	Model_MP.removeAllProperties();
 	Model_MP.end();
-	
+
 	// must end IloEnv object as the last one
 	Env_MP.removeAllProperties();
 	Env_MP.end();

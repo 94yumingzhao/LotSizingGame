@@ -42,7 +42,7 @@ struct All_Values
 {
 	int items_num = 3;
 	int prids_num = 6; 
-	int machs_num = 3;
+	int all_machs_num = 3;
 
 	int current_iter = 0;
 	float current_branch_var_value;
@@ -109,9 +109,9 @@ void SolveFirstMasterProblem(
 	IloEnv& Env_MP,
 	IloModel& Model_MP,
 	IloObjective& Obj_MP,
-	IloRangeArray& Cons_list,
-	IloNumVarArray& K_vars_list,
-	IloNumVarArray& V_vars_list);
+	IloRangeArray& Cons_MP,
+	IloNumVarArray& Vars_MP,
+	IloNumVarArray& V_Vars);
 
 void SolveSubProblem(All_Values& Values, All_Lists& Lists);
 
@@ -121,9 +121,9 @@ void SolveUpdateMasterProblem(
 	IloEnv& Env_MP,
 	IloModel& Model_MP,
 	IloObjective& Obj_MP,
-	IloRangeArray& Cons_list,
-	IloNumVarArray& K_vars_list,
-	IloNumVarArray& V_vars_list);
+	IloRangeArray& Cons_MP,
+	IloNumVarArray& Vars_MP,
+	IloNumVarArray& V_Vars);
 
 
 

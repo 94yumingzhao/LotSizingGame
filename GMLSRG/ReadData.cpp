@@ -2,31 +2,27 @@
 #include "GMLS.h"
 using namespace std;
 
-void SplitString(const string& line_string, vector<string>& string_list, const string& data_string)
-{
+void SplitString(const string& line_string, vector<string>& string_list, const string& data_string) {
 	string_list.clear();
 	string::size_type pos1, pos2;
 
 	pos1 = 0;
 	pos2 = line_string.find(data_string);
 
-	while (string::npos != pos2)
-	{
+	while (string::npos != pos2) {
 		string_list.push_back(line_string.substr(pos1, pos2 - pos1));
 
 		pos1 = pos2 + data_string.size();
 		pos2 = line_string.find(data_string, pos1);
 	}
 
-	if (pos1 != line_string.length())
-	{
+	if (pos1 != line_string.length()) {
 		string_list.push_back(line_string.substr(pos1));
 	}
 }
 
-void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
-{
-	int machs_num = Values.machs_num;
+void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag) {
+	int all_machs_num = Values.all_machs_num;
 	int prids_num = Values.prids_num;
 
 	ifstream file_c1;
@@ -42,47 +38,39 @@ void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 	vector<string> linedatas_c3;
 
 	// coalition class 0
-	if (coalition_flag == 0)
-	{
+	if (coalition_flag == 0) {
 		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine01.csv");
 		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine02.csv");
 		file_c3.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine03.csv");
 	}
 
 	// coalition class 1
-	if (coalition_flag == 1)
-	{
+	if (coalition_flag == 1) {
 		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine01.csv");
 	}
-	if (coalition_flag == 2)
-	{
+	if (coalition_flag == 2) {
 		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine02.csv");
 	}
-	if (coalition_flag == 3)
-	{
+	if (coalition_flag == 3) {
 		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine03.csv");
 	}
 
 	// coalition class 2
-	if (coalition_flag == 4)
-	{
+	if (coalition_flag == 4) {
 		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine01.csv");
 		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine02.csv");
 	}
-	if (coalition_flag == 5)
-	{
+	if (coalition_flag == 5) {
 		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine01.csv");
 		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine03.csv");
 	}
-	if (coalition_flag == 6)
-	{
+	if (coalition_flag == 6) {
 		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine02.csv");
 		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine03.csv");
 	}
 
 	// Init vector
-	for (int t = 0; t < prids_num; t++)
-	{
+	for (int t = 0; t < prids_num; t++) {
 		Parameter_Struct pm;
 		Lists.primal_parameters.push_back(pm);
 	}
@@ -103,10 +91,8 @@ void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 	SplitString(oneline_c3, linedatas_c3, ","); // split line 2
 
 	// coalition class 0: grand coalition of all machines
-	if (coalition_flag == 0)
-	{
-		for (int t = 0; t < prids_num; t++)
-		{
+	if (coalition_flag == 0) {
+		for (int t = 0; t < prids_num; t++) {
 			Lists.primal_parameters[t].d = 0;
 			Lists.primal_parameters[t].d += atoi(linedatas_c1[t].c_str());
 			Lists.primal_parameters[t].d += atoi(linedatas_c2[t].c_str());
@@ -116,20 +102,16 @@ void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 	}
 
 	// coalition class 1: one machine one coalition
-	if (coalition_flag == 1 || coalition_flag == 2 || coalition_flag == 3)
-	{
-		for (int t = 0; t < prids_num; t++)
-		{
+	if (coalition_flag == 1 || coalition_flag == 2 || coalition_flag == 3) {
+		for (int t = 0; t < prids_num; t++) {
 			Lists.primal_parameters[t].d = atoi(linedatas_c1[t].c_str());
 			Values.machine_capacity += Lists.primal_parameters[t].d;
 		}
 	}
 
 	// coalition class 2: one-one coalition of machines
-	if (coalition_flag == 4 || coalition_flag == 5 || coalition_flag == 6)
-	{
-		for (int t = 0; t < prids_num; t++)
-		{
+	if (coalition_flag == 4 || coalition_flag == 5 || coalition_flag == 6) {
+		for (int t = 0; t < prids_num; t++) {
 			Lists.primal_parameters[t].d = 0;
 			Lists.primal_parameters[t].d += atoi(linedatas_c1[t].c_str());
 			Lists.primal_parameters[t].d += atoi(linedatas_c2[t].c_str());
@@ -143,8 +125,7 @@ void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 	getline(file_c1, oneline_c1); // read line 5, production cost data
 	SplitString(oneline_c1, linedatas_c1, ","); // split line 5
 
-	for (int t = 0; t < prids_num; t++)
-	{
+	for (int t = 0; t < prids_num; t++) {
 		Lists.primal_parameters[t].c_X = atoi(linedatas_c1[t].c_str()); // read line 5
 	}
 
@@ -153,8 +134,7 @@ void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 	getline(file_c1, oneline_c1); // reach line 8, setup cost data
 	SplitString(oneline_c1, linedatas_c1, ","); // split line 8
 
-	for (int t = 0; t < prids_num; t++)
-	{
+	for (int t = 0; t < prids_num; t++) {
 		Lists.primal_parameters[t].c_Y = atoi(linedatas_c1[t].c_str()); // read line 8
 	}
 
@@ -163,17 +143,15 @@ void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 	getline(file_c1, oneline_c1); // reach line 11, inventory cost data
 	SplitString(oneline_c1, linedatas_c1, ","); // split line 11
 
-	for (int t = 0; t < prids_num; t++)
-	{
+	for (int t = 0; t < prids_num; t++) {
 		Lists.primal_parameters[t].c_I = atoi(linedatas_c1[t].c_str()); // read line 11
 	}
 
 	cout << endl;
 }
 
-void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
-{
-	int machs_num = Values.machs_num;
+void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag) {
+	int all_machs_num = Values.all_machs_num;
 	int prids_num = Values.prids_num;
 
 	fstream file_c1;
@@ -193,11 +171,9 @@ void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 	file_c3.open("C:/Users/YMZhao/Desktop/GMLS/GMLSRG/machine03.csv");
 
 	// Init demand_matrix
-	for (int m = 0; m < machs_num; m++)
-	{
+	for (int m = 0; m < all_machs_num; m++) {
 		vector<int> demand_list;
-		for (int t = 0; t < prids_num; t++)
-		{
+		for (int t = 0; t < prids_num; t++) {
 			int one_demand = -1;
 			demand_list.push_back(one_demand);
 		}
@@ -205,8 +181,7 @@ void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 	}
 
 	// update demand_matrix
-	if (coalition_flag == 10)
-	{
+	if (coalition_flag == 10) {
 		getline(file_c1, oneline_c1);
 		getline(file_c1, oneline_c1);
 		SplitString(oneline_c1, linedatas_c1, ",");
@@ -219,28 +194,22 @@ void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 		getline(file_c3, oneline_c3);
 		SplitString(oneline_c3, linedatas_c3, ",");
 
-		for (int m = 0; m < machs_num; m++)
-		{
-			for (int t = 0; t < prids_num; t++)
-			{
-				if (m == 0)
-				{
+		for (int m = 0; m < all_machs_num; m++) {
+			for (int t = 0; t < prids_num; t++) {
+				if (m == 0) {
 					Lists.demand_matrix[m][t] = atoi(linedatas_c1[t].c_str());
 				}
-				if (m == 1)
-				{
+				if (m == 1) {
 					Lists.demand_matrix[m][t] = atoi(linedatas_c2[t].c_str());
 				}
-				if (m == 2)
-				{
+				if (m == 2) {
 					Lists.demand_matrix[m][t] = atoi(linedatas_c3[t].c_str());
 				}
 			}
 		}
 
 		// Init vector<> primal_parameters
-		for (int t = 0; t < prids_num; t++)
-		{
+		for (int t = 0; t < prids_num; t++) {
 			Parameter_Struct pm;
 			Lists.primal_parameters.push_back(pm);
 		}
@@ -252,8 +221,7 @@ void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 		getline(file_c1, oneline_c1); // read line 5, production cost data
 		SplitString(oneline_c1, linedatas_c1, ","); // split line 5
 
-		for (int t = 0; t < prids_num; t++)
-		{
+		for (int t = 0; t < prids_num; t++) {
 			Lists.primal_parameters[t].c_X = atoi(linedatas_c1[t].c_str()); // read line 5
 		}
 
@@ -262,8 +230,7 @@ void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 		getline(file_c1, oneline_c1); // reach line 8, setup cost data
 		SplitString(oneline_c1, linedatas_c1, ","); // split line 8
 
-		for (int t = 0; t < prids_num; t++)
-		{
+		for (int t = 0; t < prids_num; t++) {
 			Lists.primal_parameters[t].c_Y = atoi(linedatas_c1[t].c_str()); // read line 8
 		}
 
@@ -272,8 +239,7 @@ void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag)
 		getline(file_c1, oneline_c1); // reach line 11, inventory cost data
 		SplitString(oneline_c1, linedatas_c1, ","); // split line 11
 
-		for (int t = 0; t < prids_num; t++)
-		{
+		for (int t = 0; t < prids_num; t++) {
 			Lists.primal_parameters[t].c_I = atoi(linedatas_c1[t].c_str()); // read line 11
 		}
 	}

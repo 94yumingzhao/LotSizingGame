@@ -1,44 +1,38 @@
 ﻿/*
 2023-02-21
-Core allocation master problem 
+Core allocation master problem
 */
 
 #include "GMLS.h"
 using namespace std;
 
-void SolveFirstMasterProblem(All_Values& Values,All_Lists& Lists)
-{
+void SolveFirstMasterProblem(All_Values& Values, All_Lists& Lists) {
+
 	IloEnv Env_MP; // Init cplex environment
 	IloModel Model_MP(Env_MP); // Init cplex model
 	IloObjective Obj_MP(Env_MP); // Init obj
+	IloNumVarArray W_Vars(Env_MP);
 
-	int machs_num = Values.machs_num;
-
-	/*************** cplex modeling by rows***************/
+	int all_machs_num = Values.all_machs_num;
 
 	// add the first row of grand coalition to the matrix
 	vector<int> first_row;
-	int cols_num = machs_num;
-	int rows_num = machs_num;
+	int all_cols_num = all_machs_num;
+	int all_rows_num = all_machs_num;
 
-	for (int col = 0; col < cols_num; col++)
-	{
+	for (int col = 0; col < all_cols_num; col++) {
 		first_row.push_back(1);
 	}
 	Lists.model_matrix.push_back(first_row);
 
 	// add rows of single machine coalitions to the matrix
-	for (int row = 0; row < rows_num; row++)
-	{
+	for (int row = 0; row < all_rows_num; row++) {
 		vector<int> temp_row;
-		for (int col = 0; col < cols_num; col++)
-		{
-			if (row == col)
-			{
+		for (int col = 0; col < all_cols_num; col++) {
+			if (row == col) {
 				temp_row.push_back(1); // one machine in each initial coalition
 			}
-			else
-			{
+			else {
 				temp_row.push_back(0);
 			}
 		}
@@ -52,48 +46,39 @@ void SolveFirstMasterProblem(All_Values& Values,All_Lists& Lists)
 	IloNumVar v_var = IloNumVar(Env_MP, v_min, v_max, ILOINT, v_name.c_str()); // V >=0
 
 	// set var W
-	IloNumVarArray W_vars_list(Env_MP);
-	for (int m = 0; m < cols_num; m++)
-	{
-		string w_name = "W_" + to_string(m + 1);
-		IloNum w_min = 0;
-		IloNum w_max = IloInfinity;
-		IloNumVar w_var = IloNumVar(Env_MP, w_min, w_max, ILOINT, w_name.c_str()); // W >=0
-		W_vars_list.add(w_var);
+	for (int m = 0; m < all_cols_num; m++) {
+		string W_name = "W_" + to_string(m + 1);
+		IloNum var_min = 0;
+		IloNum var_max = IloInfinity;
+		IloNumVar W_Var = IloNumVar(Env_MP, var_min, var_max, ILOINT, W_name.c_str()); // W >=0
+		W_Vars.add(W_Var);
 	}
 
 	// set obj
-	IloExpr obj_sum(Env_MP);
-
-	//obj_sum = v_var; 	// obj_A
-
-	for (int col = 0; col < cols_num; col++) 	//obj_B
+	IloExpr sum_obj(Env_MP);
+	for (int col = 0; col < all_cols_num; col++) 	//obj_B
 	{
-		obj_sum += W_vars_list[col];
+		sum_obj += W_Vars[col];
 	}
 
-	Obj_MP = IloMinimize(Env_MP, obj_sum); // obj MIN
+	Obj_MP = IloMinimize(Env_MP, sum_obj); // obj MIN
 	Model_MP.add(Obj_MP); // add obj
-	obj_sum.end();
+	sum_obj.end();
 
 	// set cons 
-	for (int row = 0; row < rows_num+1; row++)
-	{
-		IloExpr con_sum(Env_MP);
-		for (int col = 0; col < cols_num; col++)
-		{		
-			con_sum += Lists.model_matrix[row][col]* W_vars_list[col];
+	for (int row = 0; row < all_rows_num + 1; row++) {
+		IloExpr sum_left(Env_MP);
+		for (int col = 0; col < all_cols_num; col++) {
+			sum_left += Lists.model_matrix[row][col] * W_Vars[col];
 		}
-		if (row == 0)
-		{
-			Model_MP.add(con_sum == Lists.coalition_cost_list[row]); // con == c(N)
-		}		
-		if (row > 0)
-		{
-			//Model_MP.add(con_sum - v_var <= Lists.coalition_cost_list[row]); // con <= c(S) // con A
-			Model_MP.add(con_sum <= Lists.coalition_cost_list[row]); // con <= c(S) // con B
+		if (row == 0) {
+			Model_MP.add(sum_left == Lists.coalition_cost_list[row]); // con == c(N)
 		}
-		con_sum.end();
+		if (row > 0) {
+			//Model_MP.add(sum_1 - v_var <= Lists.coalition_cost_list[row]); // con <= c(S) // con A
+			Model_MP.add(sum_left <= Lists.coalition_cost_list[row]); // con <= c(S) // con B
+		}
+		sum_left.end();
 	}
 
 
@@ -105,41 +90,27 @@ void SolveFirstMasterProblem(All_Values& Values,All_Lists& Lists)
 	printf("\n/////////// MP1 CPLEX SOLVING END ////////////\n");
 
 	printf("\n	////////// Status //////////\n\n");
-
-	if (MP_flag == 0)
-	{
+	if (MP_flag == 0) {
 		printf("	The FIRST MP has NO feasible solutions\n");
 	}
-	else
-	{
+	else {
 		printf("	The FIRST MP has feasible solutions\n");
-
-		int Obj_value = Cplex_MP.getObjValue();
-		printf("\n	The OBJECTIVE VALUE is %d\n", Obj_value);
-
+		printf("\n	The OBJECTIVE VALUE is %f\n", Cplex_MP.getObjValue());
 		printf("\n	/////////// W /////////\n\n");
 
-		for (int col = 0; col < cols_num; col++)
-		{
-			int w_soln_val = Cplex_MP.getValue(W_vars_list[col]);
+		for (int col = 0; col < all_cols_num; col++) {
+			int w_soln_val = Cplex_MP.getValue(W_Vars[col]);
 			printf("	W_%d = %d\n", col + 1, w_soln_val);
 			Lists.MP_solns_list.push_back(w_soln_val);
 		}
-
-		// model B
-		//int v_soln_val = Cplex_MP.getValue(v_var);
-		//printf("	V = %d\n", v_soln_val);
 	}
 
-	
-	Obj_MP.removeAllProperties();
-	Obj_MP.end();
 	Cplex_MP.removeAllProperties();
 	Cplex_MP.end();
+	Obj_MP.removeAllProperties();
+	Obj_MP.end();
 	Model_MP.removeAllProperties();
 	Model_MP.end();
-
-	// must end IloEnv object as the last one
 	Env_MP.removeAllProperties();
 	Env_MP.end();
 

@@ -12,13 +12,12 @@ ILOSTLBEGIN
 #define RC_EPS 1.0e-6 // 一个接近0的很小的数
 using namespace std;
 
-void SolveOriginalProblem(All_Values& Values, All_Lists& Lists,int coalition_flag)
-{
+void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_flag) {
 	int prids_num = Values.prids_num;
 
 	IloEnv Env_OP;
 	IloModel Model_OP(Env_OP);
-	
+
 	/*****************/
 	//1、决策变量
 
@@ -26,8 +25,7 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists,int coalition_fla
 	IloArray<IloNumVar> Y_vars_list(Env_OP);
 	IloArray<IloNumVar> I_vars_list(Env_OP);
 
-	for (int t = 0; t < prids_num; t++)
-	{
+	for (int t = 0; t < prids_num; t++) {
 		string X_name = "X_" + to_string(t + 1);
 		string Y_name = "Y_" + to_string(t + 1);
 		string I_name = "I_" + to_string(t + 1);
@@ -42,50 +40,43 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists,int coalition_fla
 	}
 
 	//2、目标函数
-	IloExpr obj_sum(Env_OP);
-	for (int t = 0; t < prids_num; t++)
-	{
-		obj_sum += Lists.primal_parameters[t].c_X * X_vars_list[t];
+	IloExpr sum_obj(Env_OP);
+	for (int t = 0; t < prids_num; t++) {
+		sum_obj += Lists.primal_parameters[t].c_X * X_vars_list[t];
 	}
 
-	for (int t = 0; t < prids_num; t++)
-	{
-		obj_sum += Lists.primal_parameters[t].c_Y * Y_vars_list[t];
+	for (int t = 0; t < prids_num; t++) {
+		sum_obj += Lists.primal_parameters[t].c_Y * Y_vars_list[t];
 	}
 
-	for (int t = 0; t < prids_num; t++)
-	{
-		obj_sum += Lists.primal_parameters[t].c_I * I_vars_list[t];
+	for (int t = 0; t < prids_num; t++) {
+		sum_obj += Lists.primal_parameters[t].c_I * I_vars_list[t];
 	}
 
-	IloObjective Obj_OP = IloMinimize(Env_OP, obj_sum);
+	IloObjective Obj_OP = IloMinimize(Env_OP, sum_obj);
 	Model_OP.add(Obj_OP);
-	obj_sum.end();
+	sum_obj.end();
 
 	// 约束
-	for (int t = 0; t < prids_num; t++)
-	{
-		IloExpr con_sum(Env_OP);
-		if (t == 0)
-		{
-			con_sum += X_vars_list[t] + 0;
+	for (int t = 0; t < prids_num; t++) {
+		IloExpr sum_1(Env_OP);
+		if (t == 0) {
+			sum_1 += X_vars_list[t] + 0;
 		}
 
-		if (t > 0)
-		{
-			con_sum += X_vars_list[t] + I_vars_list[t - 1];
+		if (t > 0) {
+			sum_1 += X_vars_list[t] + I_vars_list[t - 1];
 		}
-		Model_OP.add(con_sum == Lists.primal_parameters[t].d + I_vars_list[t]);
-		con_sum.end();
+		Model_OP.add(sum_1 == Lists.primal_parameters[t].d + I_vars_list[t]);
+		sum_1.end();
 	}
 
 	// 约束
-	for (int t = 0; t < prids_num; t++)
-	{
-		IloExpr con_sum(Env_OP);
-		con_sum += X_vars_list[t];
-		Model_OP.add(con_sum <= Values.machine_capacity * Y_vars_list[t]);
-		con_sum.end();
+	for (int t = 0; t < prids_num; t++) {
+		IloExpr sum_1(Env_OP);
+		sum_1 += X_vars_list[t];
+		Model_OP.add(sum_1 <= Values.machine_capacity * Y_vars_list[t]);
+		sum_1.end();
 	}
 
 	// update Values.machine_capacity
@@ -94,42 +85,33 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists,int coalition_fla
 	printf("\n/////////// CPLEX SOLVING START ////////////\n\n");
 	IloCplex Cplex_OP(Env_OP);
 	Cplex_OP.extract(Model_OP);
-	bool OR_flag =Cplex_OP.solve();
+	bool OR_flag = Cplex_OP.solve();
 
-	if (OR_flag == 0)
-	{
+	if (OR_flag == 0) {
 		printf("\n	This OR has NO FEASIBLE solns\n");
 	}
-	else
-	{
+	else {
 		printf("\n	This OR has FEASIBLE solns\n");
 
-		if (coalition_flag == 0)
-		{
+		if (coalition_flag == 0) {
 			Cplex_OP.exportModel("LSMM123.lp");
 		}
-		if (coalition_flag == 1)
-		{
+		if (coalition_flag == 1) {
 			Cplex_OP.exportModel("LSMM1.lp");
 		}
-		if (coalition_flag == 2)
-		{
+		if (coalition_flag == 2) {
 			Cplex_OP.exportModel("LSMM2.lp");
 		}
-		if (coalition_flag == 3)
-		{
+		if (coalition_flag == 3) {
 			Cplex_OP.exportModel("LSMM3.lp");
 		}
-		if (coalition_flag == 4)
-		{
+		if (coalition_flag == 4) {
 			Cplex_OP.exportModel("LSMM12.lp");
 		}
-		if (coalition_flag == 5)
-		{
+		if (coalition_flag == 5) {
 			Cplex_OP.exportModel("LSMM13.lp");
 		}
-		if (coalition_flag == 6)
-		{
+		if (coalition_flag == 6) {
 			Cplex_OP.exportModel("LSMM23.lp");
 		}
 
@@ -141,22 +123,19 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists,int coalition_fla
 		printf("\n	Obj = %d\n", Obj_value);
 
 		cout << endl;
-		for (int t = 0; t < prids_num; t++)
-		{
+		for (int t = 0; t < prids_num; t++) {
 			int soln_val = Cplex_OP.getValue(X_vars_list[t]);
 			printf("	X_%d = %d\n", t + 1, soln_val);
 		}
 
 		cout << endl;
-		for (int t = 0; t < prids_num; t++)
-		{
+		for (int t = 0; t < prids_num; t++) {
 			int soln_val = Cplex_OP.getValue(I_vars_list[t]);
 			printf("	I_%d= %d\n", t + 1, soln_val);
 		}
 
 		cout << endl;
-		for (int t = 0; t < prids_num; t++)
-		{
+		for (int t = 0; t < prids_num; t++) {
 			int soln_val = Cplex_OP.getValue(Y_vars_list[t]);
 			printf("	Y_%d= %d\n", t + 1, soln_val);
 		}

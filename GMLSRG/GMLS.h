@@ -42,7 +42,7 @@ struct All_Values
 {
 	int items_num = 3;
 	int prids_num = 6; 
-	int machs_num = 3;
+	int all_machs_num = 3;
 
 	int current_iter = 0;
 	float current_branch_var_value;

@@ -12,36 +12,29 @@ void SolveFirstMasterProblem(
 	IloEnv& Env_MP,
 	IloModel& Model_MP,
 	IloObjective& Obj_MP,
-	IloRangeArray& Cons_list,
-	IloNumVarArray& K_vars_list,
-	IloNumVarArray& V_vars_list)
-{
+	IloRangeArray& Cons_MP,
+	IloNumVarArray& Vars_MP,
+	IloNumVarArray& V_Vars) {
 
-	int machs_num = Values.machs_num;
-	int cols_num = machs_num + 1;
-	int rows_num = machs_num;
+	int all_machs_num = Values.all_machs_num;
+	int all_cols_num = all_machs_num + 1;
+	int all_rows_num = all_machs_num;
 
-	/*************** cplex modeling by columns***************/
 
 	// The initial matrix of the master problem
 	vector<int> first_col;
-	for (int row = 0; row < rows_num; row++)
-	{
+	for (int row = 0; row < all_rows_num; row++) {
 		first_col.push_back(1);
 	}
 	Lists.model_matrix.push_back(first_col);
 
-	for (int col = 0; col < cols_num - 1; col++)
-	{
+	for (int col = 0; col < all_cols_num - 1; col++) {
 		vector<int> temp_col;
-		for (int row = 0; row < rows_num; row++)
-		{
-			if (col == row)
-			{
+		for (int row = 0; row < all_rows_num; row++) {
+			if (col == row) {
 				temp_col.push_back(1); // one machine in each initial coalition
 			}
-			else
-			{
+			else {
 				temp_col.push_back(0);
 			}
 		}
@@ -52,39 +45,32 @@ void SolveFirstMasterProblem(
 	IloNumArray  con_min(Env_MP); // cons left
 	IloNumArray  con_max(Env_MP); // cons right
 
-	// all constraints == 1
-	for (int m = 0; m < rows_num; m++)
-	{
-		// con >=1
+	for (int m = 0; m < all_rows_num; m++) { // con >=1
 		con_min.add(IloNum(1)); // con LB
 		con_max.add(IloNum(IloInfinity)); // con UB
 	}
 
-	Cons_list = IloRangeArray(Env_MP, con_min, con_max); // Init cons list
-	Model_MP.add(Cons_list); // add cons list to the model
+	Cons_MP = IloRangeArray(Env_MP, con_min, con_max); // Init cons list
+	Model_MP.add(Cons_MP); // add cons list to the model
 
 	con_min.end();
 	con_max.end();
 
 	Obj_MP = IloAdd(Model_MP, IloMinimize(Env_MP)); // obj min & add obj
 
-	for (int col = 0; col < cols_num; col++)
-	{
-		IloNum obj_para = Lists.coalitions_list[col].cost; // obj coeff == c(S)
+	for (int col = 0; col < all_cols_num; col++) {
+		IloNum obj_para = Lists.coalitions_list[col].cost; // obj para == c(S)
 		IloNumColumn CplexCol = Obj_MP(obj_para); // Init one column
-
-		for (int row = 0; row < rows_num; row++)
-		{
-			IloNum matrix_para = Lists.model_matrix[col][row];
-			CplexCol += Cons_list[row](matrix_para); // update rows in this column
+		for (int row = 0; row < all_rows_num; row++) {
+			IloNum row_para = Lists.model_matrix[col][row];
+			CplexCol += Cons_MP[row](row_para); // update rows in this column
 		}
 
-		string k_name = "K_" + to_string(col + 1);
-		IloNum k_min = 0;
-		IloNum k_max = IloInfinity;
-
-		IloNumVar k_var(CplexCol, k_min, k_max, ILOFLOAT, k_name.c_str()); // Init a var accoding to this column, var >=0
-		K_vars_list.add(k_var); // add this var to vars_list list
+		string K_name = "K_" + to_string(col + 1);
+		IloNum var_min = 0;
+		IloNum var_max = IloInfinity;
+		IloNumVar K_Var(CplexCol, var_min, var_max, ILOFLOAT, K_name.c_str()); // Init a var accoding to this column, var >=0
+		Vars_MP.add(K_Var); // add this var to vars_list list
 
 		CplexCol.end(); // must end this IloNumColumn object
 	}
@@ -98,32 +84,27 @@ void SolveFirstMasterProblem(
 
 	printf("\n	////////// Status //////////\n\n");
 
-	if (MP_flag == 0)
-	{
+	if (MP_flag == 0) {
 		printf("	The FIRST MP has NO feasible solutions\n");
 	}
-	else
-	{
+	else {
 		printf("	The FIRST MP has feasible solutions\n");
-
-		int Obj_value = Cplex_MP.getObjValue();
-		printf("\n	The OBJECTIVE VALUE is %d\n", Obj_value);
-
+		printf("\n	The OBJECTIVE VALUE is %f\n", Cplex_MP.getObjValue());
 		printf("\n	/////////// W /////////\n\n");
-		for (int col = 0; col < cols_num; col++)
-		{
-			int k_soln_val = Cplex_MP.getValue(K_vars_list[col]);
-			printf("	k_%d = %d\n", col + 1, k_soln_val);
-			Lists.MP_solns_list.push_back(k_soln_val);
+
+		for (int col = 0; col < all_cols_num; col++) {
+			int soln_val = Cplex_MP.getValue(Vars_MP[col]);
+			Lists.MP_solns_list.push_back(soln_val);
+			printf("	k_%d = %d\n", col + 1, soln_val);
 		}
 	}
 
 	Lists.dual_prices_list.clear();
-	for (int row = 0; row < rows_num; row++)
-	{
-		IloNum MP_dual_price = Cplex_MP.getDual((Cons_list)[row]);
-		Lists.dual_prices_list.push_back(MP_dual_price);
-		printf("\n	Dual_%d = %f", row + 1, MP_dual_price);
+
+	for (int row = 0; row < all_rows_num; row++) {
+		IloNum dual_val = Cplex_MP.getDual((Cons_MP)[row]);
+		Lists.dual_prices_list.push_back(dual_val);
+		printf("\n	Dual_%d = %f", row + 1, dual_val);
 	}
 
 	Cplex_MP.removeAllProperties();
