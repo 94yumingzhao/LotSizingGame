@@ -83,17 +83,17 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 		Model_SP.add(X_vars_list[t] <= Values.machine_capacity * Y_vars_list[t]);
 	}
 
-	printf("\n/////////// CPLEX SOLVING START ////////////\n\n");
+	printf("\n\t /////////// CPLEX SOLVING START ////////////\n\n");
 	Cplex_SP.extract(Model_SP);
 	Cplex_SP.exportModel("SubProblem1.lp");
 	bool SP_flag = Cplex_SP.solve();
-	printf("\n/////////// CPLEX SOLVING END ////////////\n");
+	printf("\n\t /////////// CPLEX SOLVING END ////////////\n");
 
 	if (SP_flag == 0) {
-		printf("\n	This SP has NO FEASIBLE solns\n");
+		printf("\n\t This SP has NO FEASIBLE solns\n");
 	}
 	else {
-		printf("\n	This SP has FEASIBLE solns\n");
+		printf("\n\t	This SP has FEASIBLE solns\n");
 
 		int obj_val = Cplex_SP.getObjValue();
 
@@ -101,32 +101,32 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 			Values.core_find_flag = 1;
 		}
 
-		printf("\n	Obj = %d\n", obj_val);
+		printf("\n\t Obj = %d\n", obj_val);
 		cout << endl;
 
 		Lists.SP_solns_list.clear();
 		for (int m = 0; m < all_machs_num; m++) {
 			int soln_val = Cplex_SP.getValue(Z_vars_list[m]);
-			printf("	Z_%d= %d\n", m + 1, soln_val);
+			printf("\t Z_%d= %d\n", m + 1, soln_val);
 			Lists.SP_solns_list.push_back(soln_val);
 		}
 		cout << endl;
 
 		for (int t = 0; t < prids_num; t++) {
 			int soln_val = Cplex_SP.getValue(X_vars_list[t]);
-			printf("	X_%d = %d\n", t + 1, soln_val);
+			printf("\t X_%d = %d\n", t + 1, soln_val);
 		}
 		cout << endl;
 
 		for (int t = 0; t < prids_num; t++) {
 			int soln_val = Cplex_SP.getValue(Y_vars_list[t]);
-			printf("	Y_%d= %d\n", t + 1, soln_val);
+			printf("\t Y_%d= %d\n", t + 1, soln_val);
 		}
 		cout << endl;
 
 		for (int t = 0; t < prids_num; t++) {
 			int soln_val = Cplex_SP.getValue(I_vars_list[t]);
-			printf("	I_%d= %d\n", t + 1, soln_val);
+			printf("\t I_%d= %d\n", t + 1, soln_val);
 		}
 		cout << endl;
 	}
