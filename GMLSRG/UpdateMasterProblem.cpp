@@ -78,20 +78,20 @@ void SolveUpdateMasterProblem(All_Values& Values, All_Lists& Lists) {
 
 
 	if (MP_flag == 0) {
-		printf("\n	This MP has NO feasible solutions\n");
+		printf("\n\t This MP has NO feasible solutions\n");
 	}
 	else {
-		printf("\n	This MP has feasible solutions\n");
+		printf("\n\t This MP has feasible solutions\n");
 
 		int Obj_value = Cplex_MP.getObjValue();
-		printf("\n	The OBJECTIVE VALUE is %d\n", Obj_value);
+		printf("\n\t The OBJECTIVE VALUE is %d\n", Obj_value);
 
 		printf("\n	//////////W//////////\n\n");
 
 		Lists.MP_solns_list.clear();
 		for (int col = 0; col < all_cols_num; col++) {
 			int w_soln_val = Cplex_MP.getValue(W_Vars[col]);
-			printf("	W_%d = %d\n", col + 1, w_soln_val);
+			printf("\t W_%d = %d\n", col + 1, w_soln_val);
 			Lists.MP_solns_list.push_back(w_soln_val);
 		}
 

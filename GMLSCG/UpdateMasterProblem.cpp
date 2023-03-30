@@ -68,18 +68,18 @@ void SolveUpdateMasterProblem(
 	printf("\n/////////// CPLEX SOLVING END ////////////\n");
 
 	if (MP_flag == 0) {
-		printf("\n	This MP has NO feasible solutions\n");
+		printf("\n\t This MP has NO feasible solutions\n");
 	}
 	else {
-		printf("\n	This MP has feasible solutions\n");
-		printf("\n	The OBJECTIVE VALUE is %f\n", Cplex_MP.getObjValue());
+		printf("\n\t This MP has feasible solutions\n");
+		printf("\n\t The OBJECTIVE VALUE is %f\n", Cplex_MP.getObjValue());
 		printf("\n	//////////W//////////\n\n");
 
 		Lists.MP_solns_list.clear();
 		for (int col = 0; col < all_cols_num; col++) {
 			int soln_val = Cplex_MP.getValue(Vars_MP[col]);
 			Lists.MP_solns_list.push_back(soln_val);
-			printf("\t k_%d = %d\n", col + 1, soln_val);
+			printf("\t\t k_%d = %d\n", col + 1, soln_val);
 		}
 
 		Lists.dual_prices_list.clear();

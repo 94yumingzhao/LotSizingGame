@@ -88,10 +88,10 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_fl
 
 
 	if (OR_flag == 0) {
-		printf("\n	This OR has NO FEASIBLE solns\n");
+		printf("\n\t This OR has NO FEASIBLE solns\n");
 	}
 	else {
-		printf("\n	This OR has FEASIBLE solns\n");
+		printf("\n\t This OR has FEASIBLE solns\n");
 
 		if (coalition_flag == 0) {
 
@@ -122,24 +122,24 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_fl
 		Lists.coalition_cost_list.push_back(Obj_value);
 		Lists.coalitions_list[coalition_flag].cost = Obj_value;
 
-		printf("\n	Obj = %d\n", Obj_value);
+		printf("\n\t Obj = %d\n", Obj_value);
 		cout << endl;
 
 		for (int t = 0; t < prids_num; t++) {
 			int soln_val = Cplex_OP.getValue(X_vars_list[t]);
-			printf("	X_%d = %d\n", t + 1, soln_val);
+			printf("\t X_%d = %d\n", t + 1, soln_val);
 		}
 		cout << endl;
 
 		for (int t = 0; t < prids_num; t++) {
 			int soln_val = Cplex_OP.getValue(I_vars_list[t]);
-			printf("	I_%d= %d\n", t + 1, soln_val);
+			printf("\t I_%d= %d\n", t + 1, soln_val);
 		}
 		cout << endl;
 
 		for (int t = 0; t < prids_num; t++) {
 			int soln_val = Cplex_OP.getValue(Y_vars_list[t]);
-			printf("	Y_%d= %d\n", t + 1, soln_val);
+			printf("\t Y_%d= %d\n", t + 1, soln_val);
 		}
 	}
 

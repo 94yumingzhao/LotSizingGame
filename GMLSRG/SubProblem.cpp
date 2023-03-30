@@ -83,11 +83,11 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 		Model_SP.add(X_vars_list[t] <= Values.machine_capacity * Y_vars_list[t]);
 	}
 
-	printf("\n\t /////////// CPLEX SOLVING START ////////////\n\n");
+	printf("\n/////////// CPLEX SOLVING START ////////////\n\n");
 	Cplex_SP.extract(Model_SP);
 	Cplex_SP.exportModel("SubProblem1.lp");
 	bool SP_flag = Cplex_SP.solve();
-	printf("\n\t /////////// CPLEX SOLVING END ////////////\n");
+	printf("\n/////////// CPLEX SOLVING END ////////////\n");
 
 	if (SP_flag == 0) {
 		printf("\n\t This SP has NO FEASIBLE solns\n");

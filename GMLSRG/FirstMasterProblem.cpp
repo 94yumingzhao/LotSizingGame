@@ -89,18 +89,18 @@ void SolveFirstMasterProblem(All_Values& Values, All_Lists& Lists) {
 	bool MP_flag = Cplex_MP.solve(); // solve the cplex model
 	printf("\n/////////// MP1 CPLEX SOLVING END ////////////\n");
 
-	printf("\n	////////// Status //////////\n\n");
+	printf("\n\t ////////// Status //////////\n\n");
 	if (MP_flag == 0) {
-		printf("	The FIRST MP has NO feasible solutions\n");
+		printf("\t The FIRST MP has NO feasible solutions\n");
 	}
 	else {
-		printf("	The FIRST MP has feasible solutions\n");
-		printf("\n	The OBJECTIVE VALUE is %f\n", Cplex_MP.getObjValue());
-		printf("\n	/////////// W /////////\n\n");
+		printf("\t The FIRST MP has feasible solutions\n");
+		printf("\n\tThe OBJECTIVE VALUE is %f\n", Cplex_MP.getObjValue());
+		printf("\n\t /////////// W /////////\n\n");
 
 		for (int col = 0; col < all_cols_num; col++) {
 			int w_soln_val = Cplex_MP.getValue(W_Vars[col]);
-			printf("	W_%d = %d\n", col + 1, w_soln_val);
+			printf("\t W_%d = %d\n", col + 1, w_soln_val);
 			Lists.MP_solns_list.push_back(w_soln_val);
 		}
 	}

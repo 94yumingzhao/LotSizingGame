@@ -85,17 +85,17 @@ void SolveFirstMasterProblem(
 	printf("\n	////////// Status //////////\n\n");
 
 	if (MP_flag == 0) {
-		printf("	The FIRST MP has NO feasible solutions\n");
+		printf("\t The FIRST MP has NO feasible solutions\n");
 	}
 	else {
-		printf("	The FIRST MP has feasible solutions\n");
-		printf("\n	The OBJECTIVE VALUE is %f\n", Cplex_MP.getObjValue());
-		printf("\n	/////////// W /////////\n\n");
+		printf("\t The FIRST MP has feasible solutions\n");
+		printf("\n\t The OBJECTIVE VALUE is %f\n", Cplex_MP.getObjValue());
+		printf("\n\t /////////// W /////////\n\n");
 
 		for (int col = 0; col < all_cols_num; col++) {
 			int soln_val = Cplex_MP.getValue(Vars_MP[col]);
 			Lists.MP_solns_list.push_back(soln_val);
-			printf("	k_%d = %d\n", col + 1, soln_val);
+			printf("\t k_%d = %d\n", col + 1, soln_val);
 		}
 	}
 
@@ -104,7 +104,7 @@ void SolveFirstMasterProblem(
 	for (int row = 0; row < all_rows_num; row++) {
 		IloNum dual_val = Cplex_MP.getDual((Cons_MP)[row]);
 		Lists.dual_prices_list.push_back(dual_val);
-		printf("\n	Dual_%d = %f", row + 1, dual_val);
+		printf("\n\t Dual_%d = %f", row + 1, dual_val);
 	}
 
 	Cplex_MP.removeAllProperties();

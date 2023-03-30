@@ -23,12 +23,12 @@ void ColumnGeneration(All_Values& Values, All_Lists& Lists) {
 		if (Values.core_find_flag == 1) // no more reduced cost from SP
 		{
 			printf("\n///////////////////////////////////////////////\n");
-			printf("\n	A point in the core is find!\n");
+			printf("\n\t A point in the core is find!\n");
 			int all_machs_num = Values.all_machs_num;
-			printf("\n	The point is ( ");
+			printf("\n\t The point is ( ");
 			for (int k = 0; k < all_machs_num; k++) {
 				IloNum stable_cost = Lists.dual_prices_list[k];
-				printf("%.2f ", stable_cost);
+				printf("\t %.2f ", stable_cost);
 			}
 			printf(")\n");
 			printf("\n///////////////////////////////////////////////\n\n\n\n");
