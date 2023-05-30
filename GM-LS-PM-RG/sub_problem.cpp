@@ -1,4 +1,4 @@
-﻿//2023-03-14
+// 2023-02-21 lot sizing sub problem
 
 
 #include "GMLS.h"
@@ -12,7 +12,7 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 	IloModel Model_SP(Env_SP);
 	IloCplex Cplex_SP(Env_SP);
 
-	// vars_list
+	// vars
 	IloArray<IloNumVar> X_vars_list(Env_SP);
 	IloArray<IloNumVar> Y_vars_list(Env_SP);
 	IloArray<IloNumVar> I_vars_list(Env_SP);
@@ -37,6 +37,19 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 		Z_vars_list.add(IloNumVar(Env_SP, 0, 1, ILOINT, Z_name.c_str()));
 	}
 
+	IloArray<IloArray<IloArray<IloNumVar>>> K_Vars(Env_SP); // Z(m,n,i,t)
+	for (int m = 0; m < M_num; m++) {
+		K_Vars.add(IloArray < IloArray<IloArray<IloNumVar>>>(Env_SP));
+		for (int n = 0; n < M_num; n++) {
+			K_Vars[m].add(IloArray<IloArray<IloNumVar>>(Env_SP));
+			for (int t = 0; t < T_num; t++) {
+				string var_name = "K_" + to_string(m + 1) + "_" + to_string(n + 1)  + "_" + to_string(t + 1);
+				IloNumVar K_var = IloNumVar(Env_SP, 0, IloInfinity, ILOINT, var_name.c_str());
+				K_Vars[m][n].add(K_var);
+			}
+		}
+	}
+
 	// obj
 	IloExpr sum_obj(Env_SP);
 	for (int t = 0; t < T_num; t++) {
@@ -52,7 +65,7 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 	}
 
 	for (int m = 0; m < M_num; m++) {
-		sum_obj += Lists.dual_prices_list[m] * Z_vars_list[m]; // sum k_m * Z_m
+		sum_obj += Lists.MP_solns_list[m] * Z_vars_list[m]; // sum W_m * Z_m
 	}
 
 	IloObjective Obj_SP = IloMaximize(Env_SP, sum_obj); // obj max
@@ -93,7 +106,7 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 		printf("\n\t This SP has NO FEASIBLE solns\n");
 	}
 	else {
-		printf("\n\t This SP has FEASIBLE solns\n");
+		printf("\n\t	This SP has FEASIBLE solns\n");
 
 		int obj_val = Cplex_SP.getObjValue();
 
@@ -137,6 +150,8 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 	Cplex_SP.end();
 	Model_SP.removeAllProperties();
 	Model_SP.end();
+
+	// must end IloEnv object as the last one
 	Env_SP.removeAllProperties();
 	Env_SP.end();
 

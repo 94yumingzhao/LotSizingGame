@@ -18,33 +18,12 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="ColumnGeneration.cpp" />
-    <ClCompile Include="FirstMasterProblem.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="OriginalProblem.cpp" />
-    <ClCompile Include="ReadData.cpp" />
-    <ClCompile Include="SubProblem.cpp" />
-    <ClCompile Include="UpdateMasterProblem.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GMLS.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="machine01.csv" />
-    <None Include="machine02.csv" />
-    <None Include="machine03.csv" />
-    <None Include="SubProblem1.lp" />
-    <None Include="TheFirstMasterProblemR.lp" />
-    <None Include="TheNewMasterProblemR.lp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{a1aefd2a-616f-4a26-a333-46ef0e29401b}</ProjectGuid>
-    <RootNamespace>GMLSCG</RootNamespace>
+    <ProjectGuid>{2b885fbe-cf35-40bd-9aef-dfefdff89bd3}</ProjectGuid>
+    <RootNamespace>GMLSPMRG</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>GM-LS-CG</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -123,16 +102,16 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;IL_STD</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;IL_STD;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Program Files\IBM\ILOG\CPLEX_Studio_Community201\cplex\include;C:\Program Files\IBM\ILOG\CPLEX_Studio_Community201\concert\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\IBM\ILOG\CPLEX_Enterprise_Server1210\CPLEX_Studio\cplex\include;C:\Program Files\IBM\ILOG\CPLEX_Enterprise_Server1210\CPLEX_Studio\concert\include;</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Program Files\IBM\ILOG\CPLEX_Studio_Community201\cplex\lib\x64_windows_msvc14\stat_mda;C:\Program Files\IBM\ILOG\CPLEX_Studio_Community201\concert\lib\x64_windows_msvc14\stat_mda</AdditionalLibraryDirectories>
-      <AdditionalDependencies>C:\Program Files\IBM\ILOG\CPLEX_Studio_Community201\cplex\lib\x64_windows_msvc14\stat_mda\cplex2010.lib;C:\Program Files\IBM\ILOG\CPLEX_Studio_Community201\cplex\lib\x64_windows_msvc14\stat_mda\ilocplex.lib;C:\Program Files\IBM\ILOG\CPLEX_Studio_Community201\concert\lib\x64_windows_msvc14\stat_mda\concert.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files\IBM\ILOG\CPLEX_Enterprise_Server1210\CPLEX_Studio\concert\lib\x64_windows_msvc14\stat_mda;C:\Program Files\IBM\ILOG\CPLEX_Enterprise_Server1210\CPLEX_Studio\cplex\lib\x64_windows_msvc14\stat_mda;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>C:\Program Files\IBM\ILOG\CPLEX_Enterprise_Server1210\CPLEX_Studio\cplex\lib\x64_windows_msvc14\stat_mda\cplex12100.lib;C:\Program Files\IBM\ILOG\CPLEX_Enterprise_Server1210\CPLEX_Studio\cplex\lib\x64_windows_msvc14\stat_mda\ilocplex.lib;C:\Program Files\IBM\ILOG\CPLEX_Enterprise_Server1210\CPLEX_Studio\concert\lib\x64_windows_msvc14\stat_mda\concert.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -151,6 +130,18 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="first_master_problem.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="original_problem.cpp" />
+    <ClCompile Include="read_data.cpp" />
+    <ClCompile Include="row_generation.cpp" />
+    <ClCompile Include="sub_problem.cpp" />
+    <ClCompile Include="update_master_problem.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GMLS.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

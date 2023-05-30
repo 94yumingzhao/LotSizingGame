@@ -1,5 +1,5 @@
-﻿/*
-//2023-03-14
+/*
+2023-02-13
 lot sizing cooperative game
 */
 
@@ -28,9 +28,8 @@ int main() {
 
 	printf("\n\n+++++++++++++++++ Heuristics END +++++++++++++++++\n\n");
 
-
-	NewReadData(Values, Lists, 10); // read data again for CG loop
-	ColumnGeneration(Values, Lists); // find a stable point in core with CG loop 
+	NewReadData(Values, Lists, 10);
+	RowGeneration(Values, Lists);
 
 	system("pause");
 	return 0;

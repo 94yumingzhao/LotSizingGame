@@ -14,7 +14,7 @@ int main() {
 
 	// number of all possible coalition patterns = 2^players_num-1
 	int coalitions_pattern_num = 1;
-	int players_num = Values.all_machs_num;
+	int players_num = Values.M_num;
 	for (int k = 0; k < players_num; k++) {
 		coalitions_pattern_num = coalitions_pattern_num * 2;
 	}

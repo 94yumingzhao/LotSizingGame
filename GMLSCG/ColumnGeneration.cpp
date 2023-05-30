@@ -24,9 +24,9 @@ void ColumnGeneration(All_Values& Values, All_Lists& Lists) {
 		{
 			printf("\n///////////////////////////////////////////////\n");
 			printf("\n\t A point in the core is find!\n");
-			int all_machs_num = Values.all_machs_num;
+			int M_num = Values.M_num;
 			printf("\n\t The point is ( ");
-			for (int k = 0; k < all_machs_num; k++) {
+			for (int k = 0; k < M_num; k++) {
 				IloNum stable_cost = Lists.dual_prices_list[k];
 				printf("\t %.2f ", stable_cost);
 			}

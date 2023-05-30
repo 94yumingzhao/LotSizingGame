@@ -1,5 +1,5 @@
-ï»¿/*
-//2023-03-14
+/*
+2022-01-17
 single item multi machine lot sizing
 */
 
@@ -9,7 +9,7 @@ single item multi machine lot sizing
 
 ILOSTLBEGIN
 
-#define RC_EPS 1.0e-6 // ä¸€ä¸ªæ¥è¿‘0çš„å¾ˆå°çš„æ•°
+#define RC_EPS 1.0e-6 // Ò»¸ö½Ó½ü0µÄºÜĞ¡µÄÊı
 using namespace std;
 
 void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_flag) {
@@ -19,7 +19,8 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_fl
 	IloModel Model_OP(Env_OP);
 
 	/*****************/
-	//1ã€å†³ç­–å˜é‡
+	//1¡¢¾ö²ß±äÁ¿
+
 	IloArray<IloNumVar> X_vars_list(Env_OP);
 	IloArray<IloNumVar> Y_vars_list(Env_OP);
 	IloArray<IloNumVar> I_vars_list(Env_OP);
@@ -38,7 +39,7 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_fl
 		I_vars_list.add(I_var);
 	}
 
-	//2ã€ç›®æ ‡å‡½æ•°
+	//2¡¢Ä¿±êº¯Êı
 	IloExpr sum_obj(Env_OP);
 	for (int t = 0; t < T_num; t++) {
 		sum_obj += Lists.primal_parameters[t].c_X * X_vars_list[t];
@@ -56,7 +57,7 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_fl
 	Model_OP.add(Obj_OP);
 	sum_obj.end();
 
-	// çº¦æŸ
+	// Ô¼Êø
 	for (int t = 0; t < T_num; t++) {
 		IloExpr sum_1(Env_OP);
 		if (t == 0) {
@@ -70,7 +71,7 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_fl
 		sum_1.end();
 	}
 
-	// çº¦æŸ
+	// Ô¼Êø
 	for (int t = 0; t < T_num; t++) {
 		IloExpr sum_1(Env_OP);
 		sum_1 += X_vars_list[t];
@@ -86,15 +87,13 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_fl
 	Cplex_OP.extract(Model_OP);
 	bool OR_flag = Cplex_OP.solve();
 
-
 	if (OR_flag == 0) {
-		printf("\n\t This OR has NO FEASIBLE solns\n");
+		printf("\n	This OR has NO FEASIBLE solns\n");
 	}
 	else {
-		printf("\n\t This OR has FEASIBLE solns\n");
+		printf("\n	This OR has FEASIBLE solns\n");
 
 		if (coalition_flag == 0) {
-
 			Cplex_OP.exportModel("LSMM123.lp");
 		}
 		if (coalition_flag == 1) {
@@ -120,23 +119,22 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_fl
 
 		int Obj_value = Cplex_OP.getObjValue();
 		Lists.coalition_cost_list.push_back(Obj_value);
-		Lists.coalitions_list[coalition_flag].cost = Obj_value;
 
 		printf("\n\t Obj = %d\n", Obj_value);
-		cout << endl;
 
+		cout << endl;
 		for (int t = 0; t < T_num; t++) {
 			int soln_val = Cplex_OP.getValue(X_vars_list[t]);
 			printf("\t X_%d = %d\n", t + 1, soln_val);
 		}
-		cout << endl;
 
+		cout << endl;
 		for (int t = 0; t < T_num; t++) {
 			int soln_val = Cplex_OP.getValue(I_vars_list[t]);
 			printf("\t I_%d= %d\n", t + 1, soln_val);
 		}
-		cout << endl;
 
+		cout << endl;
 		for (int t = 0; t < T_num; t++) {
 			int soln_val = Cplex_OP.getValue(Y_vars_list[t]);
 			printf("\t Y_%d= %d\n", t + 1, soln_val);

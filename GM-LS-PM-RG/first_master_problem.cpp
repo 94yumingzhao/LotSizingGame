@@ -1,4 +1,4 @@
-﻿/*
+/*
 2023-02-21
 Core allocation master problem
 */

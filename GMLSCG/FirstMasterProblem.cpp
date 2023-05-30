@@ -16,9 +16,9 @@ void SolveFirstMasterProblem(
 	IloNumVarArray& Vars_MP,
 	IloNumVarArray& V_Vars) {
 
-	int all_machs_num = Values.all_machs_num;
-	int all_cols_num = all_machs_num + 1;
-	int all_rows_num = all_machs_num;
+	int M_num = Values.M_num;
+	int all_cols_num = M_num + 1;
+	int all_rows_num = M_num;
 
 
 	// The initial matrix of the master problem

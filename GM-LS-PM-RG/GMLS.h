@@ -1,5 +1,5 @@
-ï»¿/*
-2023-02-13
+/*
+2023-05-30
 lot sizing cooperative game
 */
 
@@ -13,8 +13,7 @@ lot sizing cooperative game
 #include <ilcplex/ilocplex.h>
 using namespace std;
 
-struct Parameter_Struct
-{
+struct Parameter_Struct {
 	int i_index = -1;
 	int t_index = -1;
 	// int C = 0;
@@ -28,9 +27,8 @@ struct Parameter_Struct
 	int d_sum = -1;
 };
 
-// åˆå§‹è§£è§’æ ‡ it
-struct Variabe_Struct
-{
+// ³õÊ¼½â½Ç±ê it
+struct Variabe_Struct {
 	int i_index = -1;
 	int t_index = -1;
 	int X = -1;
@@ -38,27 +36,25 @@ struct Variabe_Struct
 	int I = -1;
 };
 
-struct All_Values
-{
+struct All_Values {
 	int items_num = 3;
-	int T_num = 6; 
+	int T_num = 6;
 	int M_num = 3;
 
 	int current_iter = 0;
 	float current_branch_var_value;
 
 	int current_bench_time = 0;
-	float current_optimal_bound=-1;
+	float current_optimal_bound = -1;
 
 	int machine_capacity = 0;
 
 	int core_find_flag = -1;
 };
 
-struct All_Lists
-{
-	vector<Parameter_Struct> primal_parameters; // ç‰©å“æ—¶é—´è§’æ ‡
-	vector<Variabe_Struct> current_solns_list; // åˆå§‹æ±‚è§£ç»“æœ
+struct All_Lists {
+	vector<Parameter_Struct> primal_parameters; // ÎïÆ·Ê±¼ä½Ç±ê
+	vector<Variabe_Struct> current_solns_list; // ³õÊ¼Çó½â½á¹û
 
 	vector<int> MP_solns_list;
 
@@ -73,7 +69,7 @@ struct All_Lists
 	vector<int> single_machine_demand;
 
 	vector<int> coalition_cost_list; // list of all possible c(S)
-	
+
 	vector<int> SP_solns_list; // results of master problem
 
 	vector<vector<int>> model_matrix; // master problem matrix modeled by rows 
@@ -83,17 +79,17 @@ struct All_Lists
 };
 
 
-void FirstReadData(All_Values& Values, All_Lists& Lists,int coalition_flag);
+void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag);
 
 void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_flag);
 
-void SolveFirstMasterProblem(All_Values& Values,All_Lists& Lists);
+void SolveFirstMasterProblem(All_Values& Values, All_Lists& Lists);
 
 void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag);
 
 void SolveSubProblem(All_Values& Values, All_Lists& Lists);
 
-void SolveUpdateMasterProblem(All_Values& Values,All_Lists& Lists);
+void SolveUpdateMasterProblem(All_Values& Values, All_Lists& Lists);
 
 void RowGeneration(All_Values& Values, All_Lists& Lists);
 

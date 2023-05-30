@@ -13,11 +13,11 @@ void SolveUpdateMasterProblem(
 	IloNumVarArray& Vars_MP,
 	IloNumVarArray& V_Vars) {
 
-	int all_machs_num = Values.all_machs_num;
+	int M_num = Values.M_num;
 
 	// add new row to the matrix
 	vector<int> new_col;
-	int all_rows_num = all_machs_num;
+	int all_rows_num = M_num;
 	for (int row = 0; row < all_rows_num; row++) {
 		int soln_val = Lists.SP_solns_list[row];
 		new_col.push_back(soln_val);

@@ -24,7 +24,7 @@
     <ProjectGuid>{ff4ff8dd-3a96-48ea-8504-6f9f56af5778}</ProjectGuid>
     <RootNamespace>GMLS</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>GMLSRG</ProjectName>
+    <ProjectName>GM-LS-RG</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
