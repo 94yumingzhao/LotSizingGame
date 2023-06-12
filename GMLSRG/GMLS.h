@@ -60,9 +60,9 @@ struct All_Lists
 	vector<Parameter_Struct> primal_parameters; // 物品时间角标
 	vector<Variabe_Struct> current_solns_list; // 初始求解结果
 
-	vector<int> MP_solns_list;
+	vector<double> MP_solns_list;
 
-	vector<float>dual_prices_list;
+	vector < double > dual_prices_list;
 
 	vector<vector<int>> X_fix;
 	vector<vector<int>> Y_fix;
@@ -72,9 +72,9 @@ struct All_Lists
 
 	vector<int> single_machine_demand;
 
-	vector<int> coalition_cost_list; // list of all possible c(S)
+	vector<double> coalition_cost_list; // list of all possible c(S)
 	
-	vector<int> SP_solns_list; // results of master problem
+	vector<double> SP_solns_list; // results of master problem
 
 	vector<vector<int>> model_matrix; // master problem matrix modeled by rows 
 	vector<vector<int>> Master_Matrix_C; // master problem matrix modeled by cols

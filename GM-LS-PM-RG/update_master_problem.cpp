@@ -15,8 +15,8 @@ void SolveUpdateMasterProblem(All_Values& Values, All_Lists& Lists) {
 	vector<int> new_row;
 	int all_cols_num = M_num;
 	for (int col = 0; col < all_cols_num; col++) {
-		int soln_val = Lists.SP_solns_list[col];
-		new_row.push_back(soln_val);
+		double soln_val = Lists.SP_solns_list[col];
+		new_row.push_back(int(soln_val));
 	}
 	Lists.model_matrix.push_back(new_row);
 
@@ -83,15 +83,15 @@ void SolveUpdateMasterProblem(All_Values& Values, All_Lists& Lists) {
 	else {
 		printf("\n\t This MP has feasible solutions\n");
 
-		int Obj_value = Cplex_MP.getObjValue();
-		printf("\n\t The OBJECTIVE VALUE is %d\n", Obj_value);
+		double Obj_value = Cplex_MP.getObjValue();
+		printf("\n\t The OBJECTIVE VALUE is %f\n", Obj_value);
 
 		printf("\n	//////////W//////////\n\n");
 
 		Lists.MP_solns_list.clear();
 		for (int col = 0; col < all_cols_num; col++) {
-			int w_soln_val = Cplex_MP.getValue(W_Vars[col]);
-			printf("\t W_%d = %d\n", col + 1, w_soln_val);
+			double w_soln_val = Cplex_MP.getValue(W_Vars[col]);
+			printf("\t W_%d = %f\n", col + 1, w_soln_val);
 			Lists.MP_solns_list.push_back(w_soln_val);
 		}
 

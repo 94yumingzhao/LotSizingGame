@@ -95,38 +95,38 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 	else {
 		printf("\n\t This SP has FEASIBLE solns\n");
 
-		int obj_val = Cplex_SP.getObjValue();
+		double obj_val = Cplex_SP.getObjValue();
 
 		if (obj_val <= 0) {
 			Values.core_find_flag = 1;
 		}
 
-		printf("\n\t Obj = %d\n", obj_val);
+		printf("\n\t Obj = %f\n", obj_val);
 		cout << endl;
 
 		Lists.SP_solns_list.clear();
 		for (int m = 0; m < M_num; m++) {
-			int soln_val = Cplex_SP.getValue(Z_vars_list[m]);
-			printf("\t Z_%d= %d\n", m + 1, soln_val);
+			double soln_val = Cplex_SP.getValue(Z_vars_list[m]);
+			printf("\t Z_%d= %f\n", m + 1, soln_val);
 			Lists.SP_solns_list.push_back(soln_val);
 		}
 		cout << endl;
 
 		for (int t = 0; t < T_num; t++) {
-			int soln_val = Cplex_SP.getValue(X_vars_list[t]);
-			printf("\t X_%d = %d\n", t + 1, soln_val);
+			double soln_val = Cplex_SP.getValue(X_vars_list[t]);
+			printf("\t X_%d = %f\n", t + 1, soln_val);
 		}
 		cout << endl;
 
 		for (int t = 0; t < T_num; t++) {
-			int soln_val = Cplex_SP.getValue(Y_vars_list[t]);
-			printf("\t Y_%d= %d\n", t + 1, soln_val);
+			double soln_val = Cplex_SP.getValue(Y_vars_list[t]);
+			printf("\t Y_%d= %f\n", t + 1, soln_val);
 		}
 		cout << endl;
 
 		for (int t = 0; t < T_num; t++) {
-			int soln_val = Cplex_SP.getValue(I_vars_list[t]);
-			printf("\t I_%d= %d\n", t + 1, soln_val);
+			double soln_val = Cplex_SP.getValue(I_vars_list[t]);
+			printf("\t I_%d= %f\n", t + 1, soln_val);
 		}
 		cout << endl;
 	}

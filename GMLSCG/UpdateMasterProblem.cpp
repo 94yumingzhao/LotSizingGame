@@ -19,11 +19,11 @@ void SolveUpdateMasterProblem(
 	vector<int> new_col;
 	int all_rows_num = M_num;
 	for (int row = 0; row < all_rows_num; row++) {
-		int soln_val = Lists.SP_solns_list[row];
-		new_col.push_back(soln_val);
+		double soln_val = Lists.SP_solns_list[row];
+		new_col.push_back(int(soln_val));
 	}
 
-	int cltn_cost = 0; // coalition cost of the new col's pattern
+	double cltn_cost = 0; // coalition cost of the new col's pattern
 	int all_cltn_patterns_num = Lists.coalitions_list.size();
 
 	// find the coalition cost of this new col's pattern
@@ -77,15 +77,15 @@ void SolveUpdateMasterProblem(
 
 		Lists.MP_solns_list.clear();
 		for (int col = 0; col < all_cols_num; col++) {
-			int soln_val = Cplex_MP.getValue(Vars_MP[col]);
+			double soln_val = Cplex_MP.getValue(Vars_MP[col]);
 			Lists.MP_solns_list.push_back(soln_val);
-			printf("\t\t k_%d = %d\n", col + 1, soln_val);
+			printf("\t\t k_%d = %f\n", col + 1, soln_val);
 		}
 
 		Lists.dual_prices_list.clear();
 
 		for (int row = 0; row < all_rows_num; row++) {
-			IloNum dual_val = Cplex_MP.getDual((Cons_MP)[row]);
+			double dual_val = Cplex_MP.getDual((Cons_MP)[row]);
 			Lists.dual_prices_list.push_back(dual_val);
 			printf("\n\t Dual_%d = %f", row + 1, dual_val);
 		}

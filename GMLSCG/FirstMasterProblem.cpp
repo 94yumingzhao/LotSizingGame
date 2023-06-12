@@ -93,9 +93,9 @@ void SolveFirstMasterProblem(
 		printf("\n\t /////////// W /////////\n\n");
 
 		for (int col = 0; col < all_cols_num; col++) {
-			int soln_val = Cplex_MP.getValue(Vars_MP[col]);
-			Lists.MP_solns_list.push_back(soln_val);
-			printf("\t k_%d = %d\n", col + 1, soln_val);
+			double soln_val = Cplex_MP.getValue(Vars_MP[col]);
+			Lists.MP_solns_list.push_back(int(soln_val));
+			printf("\t k_%d = %f\n", col + 1, soln_val);
 		}
 	}
 
