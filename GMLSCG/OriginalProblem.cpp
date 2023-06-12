@@ -20,9 +20,9 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_fl
 
 	/*****************/
 	//1、决策变量
-	IloArray<IloNumVar> X_vars_list(Env_OP);
-	IloArray<IloNumVar> Y_vars_list(Env_OP);
-	IloArray<IloNumVar> I_vars_list(Env_OP);
+	IloArray<IloNumVar> X_vars(Env_OP);
+	IloArray<IloNumVar> Y_vars(Env_OP);
+	IloArray<IloNumVar> I_vars(Env_OP);
 
 	for (int t = 0; t < T_num; t++) {
 		string X_name = "X_" + to_string(t + 1);
@@ -33,23 +33,23 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_fl
 		IloNumVar Y_var = IloNumVar(Env_OP, 0, 1, ILOINT, Y_name.c_str());
 		IloNumVar I_var = IloNumVar(Env_OP, 0, IloInfinity, ILOINT, I_name.c_str());
 
-		X_vars_list.add(X_var);
-		Y_vars_list.add(Y_var);
-		I_vars_list.add(I_var);
+		X_vars.add(X_var);
+		Y_vars.add(Y_var);
+		I_vars.add(I_var);
 	}
 
 	//2、目标函数
 	IloExpr sum_obj(Env_OP);
 	for (int t = 0; t < T_num; t++) {
-		sum_obj += Lists.primal_parameters[t].c_X * X_vars_list[t];
+		sum_obj += Lists.primal_parameters[t].c_X * X_vars[t];
 	}
 
 	for (int t = 0; t < T_num; t++) {
-		sum_obj += Lists.primal_parameters[t].c_Y * Y_vars_list[t];
+		sum_obj += Lists.primal_parameters[t].c_Y * Y_vars[t];
 	}
 
 	for (int t = 0; t < T_num; t++) {
-		sum_obj += Lists.primal_parameters[t].c_I * I_vars_list[t];
+		sum_obj += Lists.primal_parameters[t].c_I * I_vars[t];
 	}
 
 	IloObjective Obj_OP = IloMinimize(Env_OP, sum_obj);
@@ -60,21 +60,21 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_fl
 	for (int t = 0; t < T_num; t++) {
 		IloExpr sum_1(Env_OP);
 		if (t == 0) {
-			sum_1 += X_vars_list[t] + 0;
+			sum_1 += X_vars[t] + 0;
 		}
 
 		if (t > 0) {
-			sum_1 += X_vars_list[t] + I_vars_list[t - 1];
+			sum_1 += X_vars[t] + I_vars[t - 1];
 		}
-		Model_OP.add(sum_1 == Lists.primal_parameters[t].d + I_vars_list[t]);
+		Model_OP.add(sum_1 == Lists.primal_parameters[t].d + I_vars[t]);
 		sum_1.end();
 	}
 
 	// 约束
 	for (int t = 0; t < T_num; t++) {
 		IloExpr sum_1(Env_OP);
-		sum_1 += X_vars_list[t];
-		Model_OP.add(sum_1 <= Values.machine_capacity * Y_vars_list[t]);
+		sum_1 += X_vars[t];
+		Model_OP.add(sum_1 <= Values.machine_capacity * Y_vars[t]);
 		sum_1.end();
 	}
 
@@ -126,19 +126,19 @@ void SolveOriginalProblem(All_Values& Values, All_Lists& Lists, int coalition_fl
 		cout << endl;
 
 		for (int t = 0; t < T_num; t++) {
-			double soln_val = Cplex_OP.getValue(X_vars_list[t]);
+			double soln_val = Cplex_OP.getValue(X_vars[t]);
 			printf("\t X_%d = %f\n", t + 1, soln_val);
 		}
 		cout << endl;
 
 		for (int t = 0; t < T_num; t++) {
-			double soln_val = Cplex_OP.getValue(I_vars_list[t]);
+			double soln_val = Cplex_OP.getValue(I_vars[t]);
 			printf("\t I_%d= %f\n", t + 1, soln_val);
 		}
 		cout << endl;
 
 		for (int t = 0; t < T_num; t++) {
-			double soln_val = Cplex_OP.getValue(Y_vars_list[t]);
+			double soln_val = Cplex_OP.getValue(Y_vars[t]);
 			printf("\t Y_%d= %f\n", t + 1, soln_val);
 		}
 	}

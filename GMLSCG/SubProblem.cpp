@@ -13,9 +13,9 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 	IloCplex Cplex_SP(Env_SP);
 
 	// vars_list
-	IloArray<IloNumVar> X_vars_list(Env_SP);
-	IloArray<IloNumVar> Y_vars_list(Env_SP);
-	IloArray<IloNumVar> I_vars_list(Env_SP);
+	IloArray<IloNumVar> X_vars(Env_SP);
+	IloArray<IloNumVar> Y_vars(Env_SP);
+	IloArray<IloNumVar> I_vars(Env_SP);
 	IloArray<IloNumVar> Z_vars_list(Env_SP);
 
 	for (int t = 0; t < T_num; t++) {
@@ -27,9 +27,9 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 		IloNumVar Y_var = IloNumVar(Env_SP, 0, 1, ILOINT, Y_name.c_str());
 		IloNumVar I_var = IloNumVar(Env_SP, 0, IloInfinity, ILOINT, I_name.c_str());
 
-		X_vars_list.add(X_var);
-		Y_vars_list.add(Y_var);
-		I_vars_list.add(I_var);
+		X_vars.add(X_var);
+		Y_vars.add(Y_var);
+		I_vars.add(I_var);
 	}
 
 	for (int m = 0; m < M_num; m++) {
@@ -40,15 +40,15 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 	// obj
 	IloExpr sum_obj(Env_SP);
 	for (int t = 0; t < T_num; t++) {
-		sum_obj -= Lists.primal_parameters[t].c_X * X_vars_list[t];
+		sum_obj -= Lists.primal_parameters[t].c_X * X_vars[t];
 	}
 
 	for (int t = 0; t < T_num; t++) {
-		sum_obj -= Lists.primal_parameters[t].c_Y * Y_vars_list[t];
+		sum_obj -= Lists.primal_parameters[t].c_Y * Y_vars[t];
 	}
 
 	for (int t = 0; t < T_num; t++) {
-		sum_obj -= Lists.primal_parameters[t].c_I * I_vars_list[t];
+		sum_obj -= Lists.primal_parameters[t].c_I * I_vars[t];
 	}
 
 	for (int m = 0; m < M_num; m++) {
@@ -68,11 +68,11 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 		}
 
 		if (t == 0) {
-			Model_SP.add(X_vars_list[t] == sum_1 + I_vars_list[t]);
+			Model_SP.add(X_vars[t] == sum_1 + I_vars[t]);
 		}
 
 		if (t > 0) {
-			Model_SP.add(X_vars_list[t] + I_vars_list[t - 1] == sum_1 + I_vars_list[t]);
+			Model_SP.add(X_vars[t] + I_vars[t - 1] == sum_1 + I_vars[t]);
 		}
 
 		sum_1.end();
@@ -80,7 +80,7 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 
 	// number of con 2 == T 
 	for (int t = 0; t < T_num; t++) {
-		Model_SP.add(X_vars_list[t] <= Values.machine_capacity * Y_vars_list[t]);
+		Model_SP.add(X_vars[t] <= Values.machine_capacity * Y_vars[t]);
 	}
 
 	printf("\n/////////// CPLEX SOLVING START ////////////\n\n");
@@ -113,19 +113,19 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 		cout << endl;
 
 		for (int t = 0; t < T_num; t++) {
-			double soln_val = Cplex_SP.getValue(X_vars_list[t]);
+			double soln_val = Cplex_SP.getValue(X_vars[t]);
 			printf("\t X_%d = %f\n", t + 1, soln_val);
 		}
 		cout << endl;
 
 		for (int t = 0; t < T_num; t++) {
-			double soln_val = Cplex_SP.getValue(Y_vars_list[t]);
+			double soln_val = Cplex_SP.getValue(Y_vars[t]);
 			printf("\t Y_%d= %f\n", t + 1, soln_val);
 		}
 		cout << endl;
 
 		for (int t = 0; t < T_num; t++) {
-			double soln_val = Cplex_SP.getValue(I_vars_list[t]);
+			double soln_val = Cplex_SP.getValue(I_vars[t]);
 			printf("\t I_%d= %f\n", t + 1, soln_val);
 		}
 		cout << endl;

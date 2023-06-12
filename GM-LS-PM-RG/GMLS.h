@@ -40,6 +40,7 @@ struct All_Values {
 	int items_num = 3;
 	int T_num = 6;
 	int M_num = 3;
+	int C_num = 0;
 
 	int current_iter = 0;
 	float current_branch_var_value;

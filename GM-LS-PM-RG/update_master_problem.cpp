@@ -93,6 +93,7 @@ void SolveUpdateMasterProblem(All_Values& Values, All_Lists& Lists) {
 			double w_soln_val = Cplex_MP.getValue(W_Vars[col]);
 			printf("\t W_%d = %f\n", col + 1, w_soln_val);
 			Lists.MP_solns_list.push_back(w_soln_val);
+			Values.C_num++;
 		}
 
 		// model A
