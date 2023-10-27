@@ -69,16 +69,13 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 	for (int m = 0; m < M_num; m++) {
 		sum_obj += Lists.MP_solns_list[m] * Z_vars[m]; // sum W_m * Z_m
 	}
-
 	for (int m = 0; m < C_num; m++) {
 		for (int t = 0; t < T_num; t++) {
 			sum_obj -= Lists.primal_parameters[t].c_X * X_vars[m][t];
 		}
-
 		for (int t = 0; t < T_num; t++) {
 			sum_obj -= Lists.primal_parameters[t].c_Y * Y_vars[m][t];
 		}
-
 		for (int t = 0; t < T_num; t++) {
 			sum_obj -= Lists.primal_parameters[t].c_I * I_vars[m][t];
 		}
@@ -101,11 +98,9 @@ void SolveSubProblem(All_Values& Values, All_Lists& Lists) {
 	// number of con 1 == T
 	for (int t = 0; t < T_num; t++) {
 		IloExpr sum_1(Env_SP);
-
-		for (int m = 0; m < M_num; m++) {
+		for (int m = 0; m < C_num; m++) {
 			sum_1 += Lists.demand_matrix[m][t] * Z_vars[m]; // sum d_mt *  Z_m
 		}
-
 		for (int m = 0; m < C_num; m++) {
 			for (int n = 0; n < C_num; n++) {
 				if (m != n) {

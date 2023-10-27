@@ -55,9 +55,8 @@ void SolveFirstMasterProblem(All_Values& Values, All_Lists& Lists) {
 	}
 
 	// set obj
-	IloExpr sum_obj(Env_MP);
-	for (int col = 0; col < all_cols_num; col++) 	//obj_B
-	{
+	IloExpr sum_obj(Env_MP);//obj_B
+	for (int col = 0; col < all_cols_num; col++) {
 		sum_obj += W_Vars[col];
 	}
 
@@ -80,7 +79,6 @@ void SolveFirstMasterProblem(All_Values& Values, All_Lists& Lists) {
 		}
 		sum_left.end();
 	}
-
 
 	printf("\n/////////// MP1 CPLEX SOLVING START ////////////\n\n");
 	IloCplex Cplex_MP(Env_MP); // Init cplex solver

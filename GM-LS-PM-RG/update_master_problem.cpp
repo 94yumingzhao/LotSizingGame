@@ -89,6 +89,8 @@ void SolveUpdateMasterProblem(All_Values& Values, All_Lists& Lists) {
 		printf("\n	//////////W//////////\n\n");
 
 		Lists.MP_solns_list.clear();
+		Values.C_num = 0;
+
 		for (int col = 0; col < all_cols_num; col++) {
 			double w_soln_val = Cplex_MP.getValue(W_Vars[col]);
 			printf("\t W_%d = %f\n", col + 1, w_soln_val);
@@ -99,7 +101,6 @@ void SolveUpdateMasterProblem(All_Values& Values, All_Lists& Lists) {
 		// model A
 		//int v_soln_val = Cplex_MP.getValue(v_var);
 		//printf("	V = %d\n", v_soln_val);
-
 	}
 
 	Obj_MP.removeAllProperties();

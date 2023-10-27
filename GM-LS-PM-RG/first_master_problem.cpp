@@ -98,6 +98,7 @@ void SolveFirstMasterProblem(All_Values& Values, All_Lists& Lists) {
 		printf("\n\tThe OBJECTIVE VALUE is %f\n", Cplex_MP.getObjValue());
 		printf("\n\t /////////// W /////////\n\n");
 
+		Values.C_num = 0;
 		for (int col = 0; col < all_cols_num; col++) {
 			double w_soln_val = Cplex_MP.getValue(W_Vars[col]);
 			printf("\t W_%d = %f\n", col + 1, w_soln_val);
