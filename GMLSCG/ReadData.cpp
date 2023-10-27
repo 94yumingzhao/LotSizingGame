@@ -42,9 +42,9 @@ void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag) {
 
 
 	if (coalition_flag == 0) {
-		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine01.csv");
-		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine02.csv");
-		file_c3.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine03.csv");
+		file_c1.open("C:/Users/zym60/OneDrive/GMLS/GMLSCG/machine01.csv");
+		file_c2.open("C:/Users/zym60/OneDrive/GMLS/GMLSCG/machine02.csv");
+		file_c3.open("C:/Users/zym60/OneDrive/GMLS/GMLSCG/machine03.csv");
 
 		Coalition cltn;
 		cltn.index = 0;
@@ -55,7 +55,7 @@ void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag) {
 	}
 	// coalition class 1
 	if (coalition_flag == 1) {
-		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine01.csv");
+		file_c1.open("C:/Users/zym60/OneDrive/GMLS/GMLSCG/machine01.csv");
 
 		Coalition cltn;
 		cltn.index = 1;
@@ -65,7 +65,7 @@ void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag) {
 		Lists.coalitions_list.push_back(cltn);
 	}
 	if (coalition_flag == 2) {
-		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine02.csv");
+		file_c1.open("C:/Users/zym60/OneDrive/GMLS/GMLSCG/machine02.csv");
 
 		Coalition cltn;
 		cltn.index = 2;
@@ -75,7 +75,7 @@ void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag) {
 		Lists.coalitions_list.push_back(cltn);
 	}
 	if (coalition_flag == 3) {
-		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine03.csv");
+		file_c1.open("C:/Users/zym60/OneDrive/GMLS/GMLSCG/machine03.csv");
 
 		Coalition cltn;
 		cltn.index = 3;
@@ -87,8 +87,8 @@ void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag) {
 
 	// coalition class 2
 	if (coalition_flag == 4) {
-		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine01.csv");
-		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine02.csv");
+		file_c1.open("C:/Users/zym60/OneDrive/GMLS/GMLSCG/machine01.csv");
+		file_c2.open("C:/Users/zym60/OneDrive/GMLS/GMLSCG/machine02.csv");
 
 		Coalition cltn;
 		cltn.index = 4;
@@ -98,8 +98,8 @@ void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag) {
 		Lists.coalitions_list.push_back(cltn);
 	}
 	if (coalition_flag == 5) {
-		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine01.csv");
-		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine03.csv");
+		file_c1.open("C:/Users/zym60/OneDrive/GMLS/GMLSCG/machine01.csv");
+		file_c2.open("C:/Users/zym60/OneDrive/GMLS/GMLSCG/machine03.csv");
 
 		Coalition cltn;
 		cltn.index = 5;
@@ -109,8 +109,8 @@ void FirstReadData(All_Values& Values, All_Lists& Lists, int coalition_flag) {
 		Lists.coalitions_list.push_back(cltn);
 	}
 	if (coalition_flag == 6) {
-		file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine02.csv");
-		file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine03.csv");
+		file_c1.open("C:/Users/zym60/OneDrive/GMLS/GMLSCG/machine02.csv");
+		file_c2.open("C:/Users/zym60/OneDrive/GMLS/GMLSCG/machine03.csv");
 
 		Coalition cltn;
 		cltn.index = 6;
@@ -218,9 +218,9 @@ void NewReadData(All_Values& Values, All_Lists& Lists, int coalition_flag) {
 	vector<string> linedatas_c2;
 	vector<string> linedatas_c3;
 
-	file_c1.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine01.csv");
-	file_c2.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine02.csv");
-	file_c3.open("C:/Users/YMZhao/Desktop/GMLS/GMLSCG/machine03.csv");
+	file_c1.open("C:/Users/zym60/OneDrive/GMLS/GMLSCG/machine01.csv");
+	file_c2.open("C:/Users/zym60/OneDrive/GMLS/GMLSCG/machine02.csv");
+	file_c3.open("C:/Users/zym60/OneDrive/GMLS/GMLSCG/machine03.csv");
 
 	// Init demand_matrix
 	for (int m = 0; m < M_num; m++) {

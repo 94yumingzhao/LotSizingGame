@@ -20,7 +20,6 @@ void SolveFirstMasterProblem(
 	int all_cols_num = M_num + 1;
 	int all_rows_num = M_num;
 
-
 	// The initial matrix of the master problem
 	vector<int> first_col;
 	for (int row = 0; row < all_rows_num; row++) {

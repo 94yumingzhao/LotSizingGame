@@ -20,8 +20,7 @@ void ColumnGeneration(All_Values& Values, All_Lists& Lists) {
 		SolveUpdateMasterProblem(Values, Lists, Env_MP, Model_MP, Obj_MP, Cons_MP, Vars_MP, V_Vars);
 		SolveSubProblem(Values, Lists);  // solve the lot sizing SP
 
-		if (Values.core_find_flag == 1) // no more reduced cost from SP
-		{
+		if (Values.core_find_flag == 1) {  // no more reduced cost from SP
 			printf("\n///////////////////////////////////////////////\n");
 			printf("\n\t A point in the core is find!\n");
 			int M_num = Values.M_num;

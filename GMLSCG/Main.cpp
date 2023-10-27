@@ -28,7 +28,6 @@ int main() {
 
 	printf("\n\n+++++++++++++++++ Heuristics END +++++++++++++++++\n\n");
 
-
 	NewReadData(Values, Lists, 10); // read data again for CG loop
 	ColumnGeneration(Values, Lists); // find a stable point in core with CG loop 
 
